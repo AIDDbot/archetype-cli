@@ -1,0 +1,133 @@
+# Archetype CLI
+
+Reference archetypes that follow the AIDDbot Blueprint, for a local command-line application. Each project folder is one archetype. AIDDbot copies a folder into a new system, and the system then grows from it.
+
+- Write `AGENTS.md` files, specs and other records in ASD-STE100 Simplified Technical English: short sentences, one statement in each sentence, active voice, and one word for one concept. Technical names are permitted.
+- When a request is ambiguous or incomplete, ask one closed question at a time.
+- Write code, tests and the texts of the user interface in English. The archetypes have no translations.
+
+## Environment
+
+- **Git**: default branch `main`.
+- **Runtime**: Node.js 26 or later, npm only. Each project has its own `package.json` and lock file.
+
+## Archetypes
+
+| Project | Type | Archetype | Source path | Responsibility | Instructions |
+| --- | --- | --- | --- | --- | --- |
+| cli | cli | Framework-free TypeScript, local SQLite (`node:sqlite`) | `cli/` | Run local commands and own the local store. | `cli/AGENTS.md` |
+| e2e | e2e | Playwright Test, no browser | `e2e/` | Prove the foundation requirements through the commands. It is the conformance suite of the archetypes. | `e2e/AGENTS.md` |
+
+The cli is local: no server, no port and no `back-api`. It owns its data in a SQLite file that `DATABASE_URL` selects. Each acceptance test runs the cli with its arguments and a temporary database, and reads the standard output, the standard error and the exit code. The identity of a system (`displayName`, `description`, `author`, `homepage`, `version`) is in the root `package.json`.
+
+All archetypes implement the AIDDbot foundation specs for a local cli. `foundation/` holds the instance of each spec for this system: `S0001-configuration`, `S0002-monitoring` and `S0003-health`, in the delivery order of AIDDbot. A local cli has no users, so `basic-auth` and `account` are not delivered; `layout`, `about` and `record-views` are only for a `front-web`. Each acceptance test has the tag of its requirement (`@S0001-R01`). A system that starts from these archetypes gets the same spec IDs, so the tags stay correct. The archetypes carry no business feature.
+
+## Common stack
+
+- **Projects**: cli, e2e.
+- **Language**: TypeScript 7.
+- **Runtime**: Node.js 26.
+- **Package manager**: npm.
+- **Shared development dependencies**: TypeScript, `@types/node`, oxlint, `oxlint-tsgolint`, oxfmt and npm-check-updates.
+
+| Slot | Blocks | Command | Tool |
+| --- | --- | --- | --- |
+| `lint` | Yes | `npm run lint` | oxlint with type checking and import boundaries |
+| `format` | No | `npm run format` | oxfmt |
+| `upgrade` | No | `npm run upgrade` | npm-check-updates and npm install |
+| `quality` | No | `npm run quality` | oxlint with the applicable Blueprint limits |
+
+- Use ES modules and erasable TypeScript syntax. Use literal unions for closed sets.
+- Use explicit `.ts` imports. Node.js runs TypeScript source without a build.
+- Set strict compiler options. Enable `typeAware` and `typeCheck` in oxlint.
+- The quality configuration extends lint and adds the applicable Blueprint limits.
+- Run `npm-check-updates -u` and `npm install` for upgrade. Include major releases.
+
+## Blueprint
+
+<!-- Copied as written from AIDDbot `outline-system/assets/AGENTS.template.md`, v0.3.11 (Columbus). Never change it here: change it in AIDDbot and copy it again. -->
+
+All projects obey these principles. A project `AGENTS.md` gives only its own data and the limits that its archetype changes. Do not explore the code to learn the setup. First make it work, then make it correct: only `lint`, `unit` and acceptance block a delivery, and a security finding gets one repair first. Any other violation is debt.
+
+### System
+
+- `back-api` owns the data. Only it connects to persistence. `front-web` and `cli` get data only through `back-api`. Exception: an application in a system with no `back-api`, such as a `cli`, a desktop or a mobile application, owns its local data.
+- REST API: paths start with `/api`; a resource is a plural noun. JSON bodies, ISO 8601 dates, `Authorization: Bearer <token>`. Status codes: 200, 201, 204, 400, 401, 403, 404, 409, 413, 500. Every error has the body `{ "error": "<message>" }`; an input error adds `fields`. An error never shows a stack, SQL or a path.
+- Security: no secrets in the code or the repository; a password only as a salted hash; check each input at the edge.
+
+### Containers
+
+| Container | Is | Never |
+| --- | --- | --- |
+| `core` | The platform that the framework or the entry calls one time at startup: server or shell, router, connections, error handler, global styles. | Business rules. Imports of a feature. |
+| `shared` | Generic elements with no domain, and the contracts of the services that features need (such as the logger, the HTTP client or the error type). Primitives at the root, other elements in folders by technical concern (`http`, `database`). | Domain words. Imports of `core` or of a feature. Folders `utils`, `helpers`, `common`, `misc`. |
+| feature | One flat folder for one unit of business value. The role in each file name tells its layer. | Subfolders. Imports of `core`. Imports of a different feature, except its facade. |
+| composition | The entry. It starts `core`, registers each feature by name in one explicit list (the manifest), and gives the features the services of `core` through the contracts of `shared`. The only part that knows `core` and the features. | Automatic discovery: folder scans, global decorators, file-based routers. |
+
+### Layers
+
+- composition → `presentation` → `logic` → `data`. A different feature → `facade` → `logic`. A layer never skips the next one: only the registration creates `data` and gives it to `logic`.
+- `presentation`: input, output and the registration of the feature (route, page, command). No business rules. Only the composition imports it.
+- `facade`: the public functions and types for other features. Only other features import it. A feature that gives nothing has no facade.
+- `logic`: rules and decisions. It does not know how data is stored.
+- `data`: all that the project reads or writes outside itself (database, remote API, files).
+- Types are not a layer. Each layer can use types, `shared` and the facades of other features.
+- `lint` checks the imports. With no boundary linter, `review-implementation` checks them.
+- A feature that the manifest loads on demand has no other import. Tests start the application through the composition, without a port.
+
+### Tests
+
+- Unit tests prove `logic`, at least one for each business rule, with a fake `data`. They also prove `shared` and `core`. They are fast and independent. A business rule without a unit test is debt.
+- An acceptance test proves one requirement. Its name contains the identifier of that requirement.
+- `e2e` has no layers, no manifest and no composition; the runner is the entry. `core` is the life cycle of the suite (setup, teardown, startup check of the projects). Features: one folder for each feature of the system, with `.api.spec`, `.web.spec` and `.cli.spec` tests. `shared`: primitives, `page-objects/`, `test-data/`.
+- An e2e test uses only the API, the screens and the commands. It never uses `core` or a different feature. Only the migration tests of `configuration` open the database. Each test makes its own data with unique values. One browser engine (Chromium), unless the system asks for more.
+
+### Code
+
+| Limit | Code | Tests (all `e2e` files) |
+| --- | --- | --- |
+| Cyclomatic complexity of a function | 8 | 8 |
+| Statements in a function | 16 | 64 |
+| Nesting depth | 2 | 4 |
+| Parameters of a function | 2 | 4 |
+| Lines in a file | 128 | 256 |
+| Entries in a folder | 16 | 16 |
+
+- A callback whose signature the framework sets (such as a middleware) is outside the parameter limit: disable the limit for it with a lint comment. A folder over the limit has more than one concern: divide it by concern.
+- Strictest typed form of the language and its strictest type check. One type for each domain concept, never a bare string, number, object or array. A value object for a value with rules, made at the edge; it checks only what the spec states. A closed type for a closed set: an enum or a union of literals, as the type check permits. Composition, not inheritance. Generic types in `shared`, domain types in their feature.
+- DRY: `shared` has one function to check, convert or format each common type. Look there before you write one. `quality` reports each duplicated block of code as debt.
+- Names: idiomatic, words of the domain. A function is a verb. A boolean is a question (`isActive`, `canEdit`). No negative names, no abbreviations except standard ones.
+- Early returns; no `else` on the main path. A long or deep block: a function with a domain name. More than one logical operator: a named variable or predicate. More than two values: one typed object.
+- Errors: never hide them. Catch only at the edges: the error handler of `core`, and `data` when it changes an external failure into the expected error.
+- Configuration from the environment. Query statements as named constants in the `data` file that uses them. Migrations as numbered files. A dependency only with the package manager.
+- No check, limit or default value that the spec does not state.
+
+
+## Library gate
+
+An archetype enters or changes in this repository only when all of these are true:
+
+- `lint`, `unit` and `quality` pass in each project, and `quality` reports no warning.
+- The full acceptance run of `e2e` passes against the reference `cli`.
+- Each requirement in `foundation/` has a test with its tag, and each tag names a requirement in `foundation/`.
+- The schema documents in `model/` match the code: the model and the tables of `cli`. AIDDbot copies them into each system and never derives them again.
+- The archetype has no open technical debt. Debt in an archetype goes into each system that starts from it.
+- A boundary canary fails `lint`: a `logic` file that imports a `presentation` file of the same feature. Undo the canary.
+
+A new archetype of a type (for example a `cli` in a different language) passes the same `e2e` suite. Change the suite only when the foundation specs change: first change the instance in `foundation/`, then the tests, then the code.
+
+## Versions
+
+- The version and the `codename` of the root `package.json` are the same as the AIDDbot release that pins this repository, patch included. Each AIDDbot release publishes this repository first with its version, also when nothing changed here.
+- Each version has a tag `v{version}`. Never move a published tag.
+
+## Git
+
+- MANDATORY: Preserve work; no secrets; no destructive commands.
+- Conventional commits: `{feat|refactor|fix|chore|docs|test}({project}): {description}`.
+- One archetype change in each commit, with the gate green.
+
+## Project decisions
+
+- Only the cli owns its SQLite store. Each test invocation has an isolated database.
+- The cli writes command results to standard output, and errors to standard error as `error: <message>`, never with a stack trace.
