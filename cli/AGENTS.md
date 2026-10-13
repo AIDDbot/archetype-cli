@@ -16,9 +16,8 @@ Obey the Blueprint of the root `AGENTS.md`. This file gives only the data of thi
 
 | Slot | Blocks | Command | Tool |
 | --- | --- | --- | --- |
-| `unit` | Yes | `npm test` | node --test |
+| `test` | Yes | `npm test` | node --test |
 | `start` | No | `n/a` | No server. Run commands with `npm start -- <arguments>`. |
-| `acceptance` | Yes | `n/a` | The e2e project owns acceptance. |
 
 ## 4 · Architecture
 
@@ -33,7 +32,7 @@ Obey the Blueprint of the root `AGENTS.md`. This file gives only the data of thi
 | `logic` | service |
 | `data` | SQLite repository |
 | `shared` concerns | `database`, `output` |
-| `unit` / `start` / `acceptance` | yes / n/a: no server / through e2e |
+| `test` / `start` | yes / n/a: no server |
 
 ## 5 · Folder structure
 

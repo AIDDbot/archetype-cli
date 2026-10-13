@@ -9,8 +9,7 @@
   "main": "index.js",
   "scripts": {
     "start": "playwright test --ui",
-    "test": "playwright test",
-    "unit": "node --test \"core/*.test.ts\"",
+    "test": "node --test \"core/*.test.ts\" && playwright test",
     "lint": "oxlint -c .oxlintrc.json .",
     "format": "oxfmt --write .",
     "upgrade": "ncu -u && npm install",

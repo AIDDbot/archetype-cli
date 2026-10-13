@@ -16,9 +16,8 @@ Obey the Blueprint of the root `AGENTS.md`. This file gives only the data of thi
 
 | Slot | Blocks | Command | Tool |
 | --- | --- | --- | --- |
-| `unit` | Yes | `npm run unit` | node --test, for suite core |
-| `start` | No | `n/a` | No server. `npm start` opens the runner UI for a human. |
-| `acceptance` | Yes | `npm test` | Playwright Test; forwards `--grep @S{nnnn}-` |
+| `test` | Yes | `npm test` | node --test for the suite core, then Playwright Test, headless; forwards `--grep @S{nnnn}-` |
+| `start` | No | `npm start` | The interactive Playwright UI, for a human only. An agent never runs it. |
 
 ## 4 · Architecture
 
@@ -33,7 +32,7 @@ Obey the Blueprint of the root `AGENTS.md`. This file gives only the data of thi
 | `logic` | n/a: no layers |
 | `data` | n/a: no layers |
 | `shared` concerns | `projects`, `test-data` |
-| `unit` / `start` / `acceptance` | yes: suite core / n/a: no server / yes |
+| `test` / `start` | yes: suite core, then acceptance / the runner UI, for a human only |
 
 ## 5 · Folder structure
 
