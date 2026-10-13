@@ -35,7 +35,7 @@ export function readCliSettings(environment: NodeJS.ProcessEnv): CliSettings {
   );
   if (!existsSync(directory)) throw new Error("CLI_DIRECTORY: directory does not exist");
   if (!statSync(directory).isDirectory()) throw new Error("CLI_DIRECTORY: must be a directory");
-  const start = readText(environment, { name: "CLI_START", fallback: "npm start --" });
+  const start = readText(environment, { name: "CLI_START", fallback: "npm start --silent --" });
   const isCommand =
     /^\s*(?:"[^"]*"|'[^']*'|[^\s'"]+)(?:\s+(?:"[^"]*"|'[^']*'|[^\s'"]+))*\s*$/u.test(start);
   if (!isCommand) throw new Error("CLI_START: has an unclosed quote");

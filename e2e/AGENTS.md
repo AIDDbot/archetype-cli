@@ -93,4 +93,4 @@ The index of `shared`. Read it before you write a check or a conversion. Helpers
 - **Needs**: cli, through its npm start command.
 - **Gives to**: no project. The suite returns verification evidence.
 - **Port**: n/a. The CLI has no server.
-- **Environment variables**: `CLI_DIRECTORY` — CLI project folder, default `../cli`; `CLI_START` — invocation command, default `npm start --`.
+- **Environment variables**: `CLI_DIRECTORY` — CLI project folder, default `../cli`; `CLI_START` — invocation command, default `npm start --silent --` (npm writes no notice to standard error).

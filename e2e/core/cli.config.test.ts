@@ -5,7 +5,7 @@ import { readCliSettings } from "./cli.config.ts";
 void test("suite settings have documented defaults and explicit overrides", () => {
   const settings = readCliSettings(process.env);
   assert.equal(settings.command, "npm");
-  assert.deepEqual(settings.arguments, ["start", "--"]);
+  assert.deepEqual(settings.arguments, ["start", "--silent", "--"]);
   const override = readCliSettings({
     ...process.env,
     CLI_START: `"${process.execPath}" --version`,
