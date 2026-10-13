@@ -2,7 +2,7 @@
   "name": "archetype-cli",
   "displayName": "Archetype CLI",
   "description": "Reference archetypes that follow the AIDDbot Blueprint: a local command-line application and its acceptance suite.",
-  "version": "0.3.12",
+  "version": "0.3.13",
   "codename": "Columbus",
   "private": true,
   "license": "MIT",
