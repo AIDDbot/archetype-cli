@@ -84,7 +84,7 @@ The index of `shared`. Read it before you write a check or a conversion. Helpers
 
 ### Technology rules
 
-- Use erasable TypeScript syntax because Node.js runs source files. Inject external services through shared contracts.
+The Common stack of the root `AGENTS.md` holds the technology rules.
 
 ### Project rules
 
