@@ -42,7 +42,7 @@ Each project must start in the same way in each environment, with its settings o
 
 ### e2e
 
-- `core` reads `CLI_DIRECTORY` (`../cli`, the sibling folder of the project) and `CLI_START` (`npm start`, the `start` slot of `cli`). An invalid value stops the suite. Checked by `review-implementation`, never by an acceptance test: no test runs the suite, and `e2e` has no unit tests.
+- `core` reads `CLI_DIRECTORY` (`../cli`, the sibling folder of the project) and `CLI_START` (`node src/app.main.ts`, the command of the `start` slot of `cli` without npm, which adds about half a second to each invocation; a value with npm ends in `--`). An invalid value stops the suite. Checked by `review-implementation`, never by an acceptance test: no test runs the suite, and `e2e` has no unit tests.
 - The `cli` has no preflight.
 - A helper in `shared` runs one `cli` invocation, with the environment and arguments of the test. It gives each test its own temporary configuration file, which all the invocations of that test share, and deletes it after the test. A test that needs a clean one makes a second helper. A test that copies the `cli` project to a temporary folder, such as for relative paths, also copies the root `package.json`: `shell` and `about` read the identity there.
 - A test checks what its spec adds and the order that it needs, never that nothing else exists: later specs add settings and commands.

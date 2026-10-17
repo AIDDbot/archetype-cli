@@ -47,7 +47,7 @@ function invoke(args: string[], options: Invocation) {
   const command = options.project ?? cliDirectory;
   const argumentsList = options.file == null ? args : ["--config-file", options.file, ...args];
   const executable = process.platform === "win32" ? "cmd.exe" : "/bin/sh";
-  const text = `${options.start ?? cliStart} ${options.start === undefined ? "--" : ""} ${argumentsList.map(quote).join(" ")}`;
+  const text = `${options.start ?? cliStart} ${argumentsList.map(quote).join(" ")}`;
   const parameters = process.platform === "win32" ? ["/d", "/s", "/c", text] : ["-c", text];
   return new Promise<{ code: number | null; output: string; stdout: string; stderr: string }>(
     (resolveResult, reject) => {

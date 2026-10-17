@@ -20,7 +20,7 @@ The CLI selects each value from the argument, environment, file, then default. `
 
 `config get` shows each selected value and its source. `config get <name>` shows one value. `config set <name> <value>` checks the value before it writes the file.
 
-The acceptance suite reads `CLI_DIRECTORY` and `CLI_START` from the environment. Their defaults are `../cli` and `npm start`. Each value must contain a character that is not a space. A relative `CLI_DIRECTORY` starts at the acceptance project folder.
+The acceptance suite reads `CLI_DIRECTORY` and `CLI_START` from the environment. Their defaults are `../cli` and `node src/app.main.ts`. Each value must contain a character that is not a space. A relative `CLI_DIRECTORY` starts at the acceptance project folder.
 
 ## Monitoring
 

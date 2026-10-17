@@ -7,4 +7,4 @@ function read(name: string, fallback: string) {
   return value;
 }
 export const cliDirectory = resolve(directory, read("CLI_DIRECTORY", "../cli"));
-export const cliStart = read("CLI_START", "npm start");
+export const cliStart = read("CLI_START", "node src/app.main.ts");
