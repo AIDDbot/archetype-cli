@@ -1,6 +1,6 @@
 # Archetype CLI
 
-An archetype that follows the AIDDbot Blueprint: a whole solution with a local command-line application and its acceptance suite. AIDDbot copies the whole workspace into a new system, and the system then grows from it.
+An archetype of AIDDbot: a whole solution with a local command-line application and its acceptance suite. AIDDbot copies the whole workspace into a new system, and the system grows from it. The archetype carries no business feature.
 
 - Write `AGENTS.md` files, specs and other records in ASD-STE100 Simplified Technical English: short sentences, one statement in each sentence, active voice, and one word for one concept. Technical names are permitted.
 - When a request is ambiguous or incomplete, ask one closed question at a time.
@@ -13,25 +13,25 @@ An archetype that follows the AIDDbot Blueprint: a whole solution with a local c
 
 ## Projects
 
-| Project | Type | Technology | Source path | Responsibility | Instructions |
-| --- | --- | --- | --- | --- | --- |
-| cli | cli | Framework-free TypeScript on Node.js | `projects/cli/` | Run local commands and keep the local settings. | `projects/cli/AGENTS.md` |
-| e2e | e2e | Vitest, no browser | `projects/e2e/` | Prove each command through its public interface. It is the conformance suite of the archetype. | `projects/e2e/AGENTS.md` |
+| Project | Type | Responsibility | Instructions |
+| --- | --- | --- | --- |
+| cli | cli | Run one local command with its settings, output and log. | `projects/cli/AGENTS.md` |
+| e2e | e2e | Prove each requirement through the commands. It is the conformance suite of the archetype. | `projects/e2e/AGENTS.md` |
 
-The cli is local: no server, no port, no `api` and no database. It keeps its settings in a JSON file that `CONFIG_FILE` selects, and writes its logs to `LOG_DIR`. Each acceptance test runs the cli with its arguments, its own configuration file and its own log folder, and reads the standard output, the standard error and the exit code. The identity of a system (`displayName`, `description`, `author`, `homepage`, `license`, `version`) is in the root `package.json`.
+The identity of a system (`displayName`, `description`, `author`, `homepage`, `license`, `version`) is in the root `package.json`.
 
-The repository is an AIDDbot system. `.product/specs/` holds the shipped foundation specs, numbered in their delivery order: `S0001-scaffold` (`chore`), then `S0002-configuration`, `S0003-monitoring`, `S0004-shell`, `S0005-about` and `S0006-presentation` (`feat`). The specs that repaired debt while the archetype was built are not here. A local cli has no users, so `users` is not delivered. `.product/PRD.md` lists the shipped features, and `.product/model/` holds the schema documents. Each acceptance test has the tag of its requirement (`@S0002-R01`). A system that starts from this archetype gets the same specs, so the tags stay correct, and AIDDbot gives its first business spec the next ID (`S0007`). The archetype carries no business feature.
+## Product
+
+The repository is an AIDDbot system. `.product/specs/` holds the shipped foundation specs, `S0001-scaffold` to `S0006-presentation`, in delivery order and with no gaps; `.product/PRD.md` lists them, and `.product/model/` holds the schema documents. A local cli has no users, so `users` is not delivered. Each acceptance test has the tag of its requirement (`@S0002-R01`). A system that starts from the archetype keeps the specs and their tags, and its first business spec is `S0007`.
 
 ## Common stack
 
-- **Projects**: cli and e2e
-- **Language**: TypeScript 7
-- **Runtime / framework**: Node.js, framework-free
-- **Main dependencies**: Node.js standard library — platform; Vite+ — tooling. The closed list: no other dependency, unless a spec names it
-- **Package manager**: npm
-- **Pre-commit hook**: `vp staged` — formats, lints and type-checks the staged files with safe fixes, and runs the unit tests that they affect
-- **Tooling**: `upgrade` `npm --prefix ../.. run upgrade` (one script at the root, for all the dependencies); `test` `npm test`; `start` `npm start`; `layers` `npm run layers`; `crap` `npm run crap` — Vite+ / npm
-- Use erasable TypeScript syntax because Node.js runs source files. Inject external services through shared contracts.
+- **Language**: TypeScript 7, on Node.js with no build and no framework. Use erasable syntax.
+- **Dependencies**: the Node.js standard library and Vite+. The list is closed: no other dependency unless a spec names it.
+- **Pre-commit hook**: `vp staged` formats, lints and type-checks the staged files with safe fixes, and runs the unit tests that they affect. The lint goes by packages: `correctness` and `suspicious`, with the one extra rule `no-non-null-assertion`.
+- **Limits**: `complexity.json` and `complexity.tests.json` at the root; each project extends them in its `lint/crap.json`.
+- **Upgrade**: one `upgrade` script at the root raises every dependency, majors included.
+- Inject external services through the contracts of `shared`.
 
 ## Blueprint
 
@@ -118,9 +118,3 @@ A new archetype of a type (for example a `cli` in a different language) passes t
 - MANDATORY: Preserve work; no secrets; no destructive commands.
 - Conventional commits: `{feat|refactor|fix|chore|docs|test}({project}): {description}`.
 - One archetype change in each commit, with the gate green.
-
-## Project decisions
-
-- The cli owns its local settings in a JSON file. It has no database.
-- The cli writes command results to standard output, and errors to standard error as `error: <message>`, never with a stack trace. Exit codes: 0 success, 1 rule, 2 usage, 3 unavailable.
-- Each acceptance test has its own configuration file and log folder. A test that needs the default values runs on a copy of the project.

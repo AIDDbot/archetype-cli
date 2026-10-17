@@ -1,100 +1,85 @@
-
 # Archetype CLI — cli
 
 Obey the Blueprint of the root `AGENTS.md`. This file gives only the data of this project. Do not explore the code to learn the setup.
 
 ## 1 · Purpose and boundary
 
-- **Owns**: Local command invocations and local settings.
-- **Never**: Serve a network API or manage user accounts.
+- **Owns**: one local invocation at a time, its settings, its output and its log.
+- **Never**: a network server, a database or user accounts.
 
 ## 2 · Technology
 
-Use the Common stack of the root `AGENTS.md`.
-
+The Common stack of the root `AGENTS.md`. Node.js runs `src/app.main.ts` with no build.
 
 ## 3 · Tooling
 
-| Slot | Blocks | Command | Tool |
-| --- | --- | --- | --- |
-| `test:spec` | Yes | n/a: no acceptance tests | Vite+ / npm |
-| `crap` | No | `vp lint -c lint/crap.json`; `vp test run --coverage` (both: `npm run crap`) | Vite+ |
+| Slot | Blocks | Command |
+| --- | --- | --- |
+| `test` | Yes | `npm test` |
+| `test:spec` | n/a | n/a: no acceptance tests |
+| `start` | No | `npm start -- {arguments}` |
+| `layers` | No | `npm run layers` |
+| `crap` | No | `vp lint -c lint/crap.json`; `vp test run --coverage` |
+| `upgrade` | No | `npm --prefix ../.. run upgrade` |
 
 ## 4 · Architecture
 
-**Services of `core`**: registration arguments, contracts in `src/shared/{concern}/`
-
 | Item | `cli` |
 | --- | --- |
-| composition | executable entry and explicit manifest |
-| `core` | Platform services. Later specs add them. |
-| features | commands; none in the scaffold |
-| `presentation` | command and registration |
-| `logic` | service |
-| `data` | repository / file system / API client |
-| `shared` concerns | output |
+| composition | `app.main.ts` starts `app.compose.ts`: one argument parse, the settings, the logger, the manifest, the output |
+| `core` | arguments (`parseArgs`), settings, configuration file, logger, life cycle and exit codes, help, output |
+| features | `config` (`get`, `set`), `about`; `help` and `--version` are in `core` |
+| `presentation` | `{feature}.command.ts`: the registration, with its options as data |
+| `logic` | `{feature}.service.ts` |
+| `data` | the configuration file, through `ConfigurationStorage` of `shared` |
+
+**Services of `core`**: arguments of each registration, typed by the contracts in `src/shared/{concern}/`.
 
 ## 5 · Folder structure
 
-| Concept | Path | Framework mechanism |
-| --- | --- | --- |
-| composition | `src/app.main.ts`, `src/app.compose.ts`, `src/features/features.manifest.ts` | Plain TypeScript |
-| `core` | `src/core/app.{service}.ts`, such as `app.config.ts` | Plain TypeScript |
-| features | `src/features/` | Plain TypeScript |
-| facade | `features/{feature}/{feature}.api.ts` | Plain TypeScript |
-| `presentation` / `logic` / `data` / types | `*.command.ts` / `*.service.ts` / `*.repository.ts, *.client.ts` / `*.type.ts, *.value.ts` | Plain TypeScript |
-| `shared` | `src/shared/`, `src/shared/{concern}/` | Plain TypeScript |
-| unit tests | `Beside the module, *.test.ts` | Plain TypeScript |
-
 ```text
 src/
-├── app.main.ts           # entry: starts the composition
-├── app.compose.ts        # composition: starts core, registers the features
-├── core/        # platform, called one time at startup
-├── features/    # one flat folder for each feature, and the manifest
-└── shared/      # primitives and service contracts at the root, folders by technical concern
+├── app.main.ts          # entry
+├── app.compose.ts       # composition
+├── core/app.*.ts        # platform, with its unit tests
+├── features/            # features.manifest.ts and one flat folder for each feature
+└── shared/              # primitives at the root; errors/, output/, settings/
 ```
+
+Unit tests sit beside their module as `*.test.ts`.
 
 ### Shared primitives
 
-The index of `shared`. Read it before you write a check or a conversion. Helpers of one feature follow `src/shared/{concern}/{topic}.{verb}.ts` and have no row.
+Read this index before you write a check, a conversion or a format.
 
 | Primitive | Contract | Path |
 | --- | --- | --- |
-| `isRecord(value)` | True for a key-value object. Other type guards use it. | `src/shared/checks.guard.ts` |
-| `isText(value)` | True for a text with a character that is not a space. | `src/shared/checks.guard.ts` |
-| `isOneOf(value, options)` | True for one of a closed list of values; narrows the type. | `src/shared/checks.guard.ts` |
-| `findByName(items, name)` | The item with that `name`, or nothing. | `src/shared/checks.guard.ts` |
-| `requireByName(items, { name, kind })` | The item with that `name`, or an expected error that names the kind and the name. | `src/shared/checks.guard.ts` |
-| `requireText(value, field)` | Text without end spaces, or an expected error with the field. | `src/shared/text.parse.ts` |
-| `parseInteger(value, { field, min, max })` | Integer from `min` to `max`, or an expected error with the field and the range. | `src/shared/numbers.parse.ts` |
-| `formatDate(date)` | `YYYY-MM-DD` in local time. | `src/shared/dates.format.ts` |
-| `formatTime(date)` | `HH:MM:SS.mmm` in local time. | `src/shared/dates.format.ts` |
-| `formatDateTime(date)` | `YYYY-MM-DD HH:MM:SS` in local time, for a person. | `src/shared/dates.format.ts` |
-| `ExpectedError(kind, message)` | The expected error, with its kind: `rule`, `usage` or `unavailable`. Each failed check raises it; `monitoring` gives each kind its exit code or status. | `src/shared/errors/expected.error.ts` |
-| `attempt(action, message)` | The result of `action`, or the expected error `unavailable` with `message` when an external resource fails. Only `data` and `core` use it. | `src/shared/errors/expected.error.ts` |
-| `readSetting({ name, fallback, parse })` | The parsed value from the injected first source, or its fallback. An invalid value propagates. | `src/shared/settings/read.setting.ts` |
-| list | Typed columns and rows. `formatView` writes an aligned table. | `src/shared/output/view.type.ts`, `src/shared/output/view.format.ts` |
-| record | Typed facts. `formatView` aligns their values. | `src/shared/output/view.type.ts`, `src/shared/output/view.format.ts` |
-| form | Shell option parsing names an invalid option. Business commands use the shell option contract. | `src/shared/output/command.type.ts` |
-| states | `emptyMessage` names an empty list. Monitoring reports errors. | `src/shared/output/states.format.ts` |
-| values | `formatValue` writes readable values. `machineValue` preserves standard values. | `src/shared/output/values.format.ts` |
+| `isRecord`, `isText`, `isOneOf` | Type guards for an object, a text with a character that is not a space, and a closed list. | `src/shared/checks.guard.ts` |
+| `findByName`, `requireByName` | The item with a `name`; `require…` raises an expected error with the kind and the name. | `src/shared/checks.guard.ts` |
+| `requireText`, `parseInteger` | Checked text or integer, or an expected error with the field. | `src/shared/text.parse.ts`, `src/shared/numbers.parse.ts` |
+| `formatDate`, `formatTime`, `formatDateTime` | Local date, time of day and both, for logs and people. | `src/shared/dates.format.ts` |
+| `ExpectedError(kind, message)` | `rule` (exit 1), `usage` (2) or `unavailable` (3). | `src/shared/errors/expected.error.ts` |
+| `attempt(action, message)` | An external failure as `unavailable`. Only `core` and `data`. | `src/shared/errors/expected.error.ts` |
+| `readSetting({ name, fallback, parse })` | The parsed value of the first source, or its fallback. | `src/shared/settings/read.setting.ts` |
+| `CommandRegistration`, `CommandResult` | A command and its options as data; its result as data and a view or a text. | `src/shared/output/command.type.ts` |
+| `View` (`list`, `record`), `formatView` | A typed table or facts, and their aligned text. | `src/shared/output/view.type.ts`, `src/shared/output/view.format.ts` |
+| `formatValue`, `machineValue`, `emptyMessage` | A value for a person or for `--json`, and the text of an empty list. | `src/shared/output/values.format.ts`, `src/shared/output/states.format.ts` |
+| `identity` | The name, description, author, website and version of the root `package.json`. | `src/shared/identity.ts` |
 
 ## 6 · Coding rules
 
 ### Technology rules
 
-The Common stack of the root `AGENTS.md` holds the technology rules.
+The Common stack of the root `AGENTS.md`.
 
 ### Project rules
 
-| Rule | Scope | Origin |
-| --- | --- | --- |
+- A command returns data and a view or a text; the composition writes it as text or as `--json`. A feature never writes to the console.
+- Only the composition reads the environment and the arguments, and only through the setting definitions of `core`.
 
 ## 7 · Connections
 
-- **Needs**: None.
-- **Gives to**: None.
+- **Needs**: none.
+- **Gives to**: `e2e`, through `start`.
 - **Port**: n/a: no network server.
-- **Environment variables**: `None` — No environment setting exists in this scaffold.
-
+- **Environment variables**: `CONFIG_FILE` (`./config.json`), `LOG_DIR` (`./logs`), `LOG_LEVEL` (`info`). An argument (`--config-file`, `--log-dir`, `--log-level`) wins over the environment, and the environment over the file. Paths start at the project folder.
