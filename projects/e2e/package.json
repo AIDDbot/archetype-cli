@@ -5,10 +5,9 @@
   "description": "",
   "type": "module",
   "scripts": {
-    "upgrade": "npm-check-updates -u --packageFile ../../package.json && npm install --prefix ../..",
+    "start": "vp test --passWithNoTests",
     "test": "vp test run --passWithNoTests",
     "test:spec": "vp test run --passWithNoTests -t",
-    "start": "vp test --passWithNoTests",
     "layers": "vp lint -c lint/layers.json",
     "crap": "vp lint -c lint/crap.json"
   }

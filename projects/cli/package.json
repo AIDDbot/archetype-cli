@@ -10,7 +10,6 @@
   "scripts": {
     "start": "node src/app.main.ts",
     "test": "vp test run",
-    "upgrade": "npm-check-updates -u --packageFile ../../package.json && npm install --prefix ../..",
     "layers": "vp lint -c lint/layers.json",
     "crap": "vp lint -c lint/crap.json && vp test run --coverage"
   }
