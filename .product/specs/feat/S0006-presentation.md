@@ -1,12 +1,12 @@
 ---
-id: S0009
+id: S0006
 slug: presentation
-key: S0009-presentation
+key: S0006-presentation
 type: feat
-branch: feat/S0009-presentation
+branch: feat/S0006-presentation
 domain: foundation
 ---
-# S0009-presentation — Presentation
+# S0006-presentation — Presentation
 
 ## Problem
 
@@ -51,7 +51,7 @@ A record is one thing that the application shows, such as the application itself
 ### cli
 
 - The output contract of `shell` gets a typed view (list or record); `core` writes it as text, or as JSON with `--json`. A command never formats a value or pads a column.
-- `config get` becomes a list. Its table replaces the text of `S0002-R03`, which shows each setting with its value and source. Update that acceptance test to read the table. Its JSON shape stays as `S0006-R09` says.
+- `config get` becomes a list. Its table replaces the text of `S0002-R03`, which shows each setting with its value and source. Update that acceptance test to read the table. Its JSON shape stays as `S0004-R09` says.
 - Unit tests prove the empty list (`No {records}.`) and the alignment of a table. No public foundation command can produce an empty list.
 - Value primitives keep machine values in their standard format. Human output uses readable values. Unit tests prove date and duration formatting because the foundation commands have no date or duration fact.
 
@@ -63,12 +63,12 @@ A record is one thing that the application shows, such as the application itself
 
 ### Requirements
 
-- **R01**: WHEN the `cli` shows one record (`about`), it SHALL write one line for each fact, as `{label}: {value}`, with each value in the same column. Test: read the identity from the root `package.json`; read each fact with the record reader and check its label, value and value column. Keep the project technology facts that `S0008-R02` names. Tag: `@S0009-R01`.
-- **R02**: WHEN the `cli` runs `config get`, it SHALL show the settings as a table with the columns `Setting`, `Value` and `Source`. Replaces: `S0002-R03`. Test: use the table reader to check each existing setting, its selected value and its source; cover the defaults and the argument, environment and file sources. Never assert the whole list or its order. Also invoke `config get` with an extra argument and an unknown option; check the error, command usage and exit code 2 under `S0006-R07`. Tag: `@S0009-R02`.
+- **R01**: WHEN the `cli` shows one record (`about`), it SHALL write one line for each fact, as `{label}: {value}`, with each value in the same column. Test: read the identity from the root `package.json`; read each fact with the record reader and check its label, value and value column. Keep the project technology facts that `S0005-R02` names. Tag: `@S0006-R01`.
+- **R02**: WHEN the `cli` runs `config get`, it SHALL show the settings as a table with the columns `Setting`, `Value` and `Source`. Replaces: `S0002-R03`. Test: use the table reader to check each existing setting, its selected value and its source; cover the defaults and the argument, environment and file sources. Never assert the whole list or its order. Also invoke `config get` with an extra argument and an unknown option; check the error, command usage and exit code 2 under `S0004-R07`. Tag: `@S0006-R02`.
 
 ### Expected URLs and APIs
 
 | Kind | Project | Address | Expected answer | Requirements |
 | --- | --- | --- | --- | --- |
 | command | cli | `about` | One `{label}: {value}` line for each fact. Values start in the same column. | R01 |
-| command | cli | `config get` | Table `Setting`, `Value`, `Source`. An extra argument or an unknown option shows an error and command usage, with exit code 2 under `S0006-R07`. | R02 |
+| command | cli | `config get` | Table `Setting`, `Value`, `Source`. An extra argument or an unknown option shows an error and command usage, with exit code 2 under `S0004-R07`. | R02 |

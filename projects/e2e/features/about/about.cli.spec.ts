@@ -14,7 +14,7 @@ const projects = [
 ];
 const setup = createCliSetup();
 
-test("@S0008-R01 version writes only the root identity version", async () => {
+test("@S0005-R01 version writes only the root identity version", async () => {
   const cli = await setup();
   const result = await cli.run(["--version"]);
   expect(result.code).toBe(0);
@@ -22,7 +22,7 @@ test("@S0008-R01 version writes only the root identity version", async () => {
   expect(result.stderr).toBe("");
 });
 
-test("@S0008-R02 about shows identity and each project", async () => {
+test("@S0005-R02 about shows identity and each project", async () => {
   const cli = await setup();
   const result = await cli.run(["about"]);
   expect(result.code).toBe(0);
@@ -51,7 +51,7 @@ test("@S0008-R02 about shows identity and each project", async () => {
   }
 });
 
-test("@S0008-R03 about JSON contains identity and each project", async () => {
+test("@S0005-R03 about JSON contains identity and each project", async () => {
   const cli = await setup();
   const result = await runJson(cli, ["about"]);
   expect(result.code).toBe(0);
@@ -65,7 +65,7 @@ test("@S0008-R03 about JSON contains identity and each project", async () => {
   });
 });
 
-test("@S0008-R04 version stays text with either JSON option order", async () => {
+test("@S0005-R04 version stays text with either JSON option order", async () => {
   const cli = await setup();
   for (const args of [
     ["--version", "--json"],
@@ -78,7 +78,7 @@ test("@S0008-R04 version stays text with either JSON option order", async () => 
   }
 });
 
-test("@S0008-R05 absent author uses the default author and website", async () => {
+test("@S0005-R05 absent author uses the default author and website", async () => {
   const cli = await setup();
   const project = join(cli.directory, "projects", "cli");
   await cp(join(cliDirectory, "src"), join(project, "src"), { recursive: true });

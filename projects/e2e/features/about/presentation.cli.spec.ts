@@ -12,7 +12,7 @@ function readAuthorName(author: string | { name: string }): string {
   return typeof author === "string" ? author : author.name;
 }
 
-test("@S0009-R01 about labels and aligns identity and project facts", async () => {
+test("@S0006-R01 about labels and aligns identity and project facts", async () => {
   const cli = await setup();
   const identity = JSON.parse(await readFile(resolve(cliDirectory, "../../package.json"), "utf8"));
   const result = await cli.run(["about"]);

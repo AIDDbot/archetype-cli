@@ -6,7 +6,7 @@ import { runJson } from "../../shared/projects/json.ts";
 import { cliDirectory } from "../../shared/projects/settings.ts";
 const identity = JSON.parse(await readFile(resolve(cliDirectory, "../../package.json"), "utf8"));
 const setup = createCliSetup();
-test("@S0006-R01 root help forms show identity and commands", async () => {
+test("@S0004-R01 root help forms show identity and commands", async () => {
   const cli = await setup();
   for (const args of [[], ["help"], ["--help"]]) {
     const result = await cli.run(args);
@@ -16,7 +16,7 @@ test("@S0006-R01 root help forms show identity and commands", async () => {
     expect(result.stdout).toContain("config  Read and write local settings");
   }
 });
-test("@S0006-R02 command help forms describe operations and options", async () => {
+test("@S0004-R02 command help forms describe operations and options", async () => {
   const cli = await setup();
   for (const args of [
     ["help", "config"],
@@ -38,7 +38,7 @@ test("@S0006-R02 command help forms describe operations and options", async () =
       expect(result.stdout).toContain(text);
   }
 });
-test("@S0006-R03 unknown command reports root help only on stderr", async () => {
+test("@S0004-R03 unknown command reports root help only on stderr", async () => {
   const cli = await setup();
   const name = `unknown-${Date.now()}`;
   const result = await cli.run([name]);
@@ -48,7 +48,7 @@ test("@S0006-R03 unknown command reports root help only on stderr", async () => 
   expect(result.stderr).toContain(identity.displayName ?? identity.name);
   expect(result.stderr).toContain("config  Read and write local settings");
 });
-test("@S0006-R04 foundation commands return exactly one JSON object @S0006-R06 help data", async () => {
+test("@S0004-R04 foundation commands return exactly one JSON object @S0004-R06 help data", async () => {
   const cli = await setup();
   const help = await runJson(cli, ["help"]);
   expect(help.code).toBe(0);
@@ -71,7 +71,7 @@ test("@S0006-R04 foundation commands return exactly one JSON object @S0006-R06 h
     expect(result.data).toBeTypeOf("object");
   }
 });
-test("@S0006-R05 JSON failures preserve exit codes and use stdout", async () => {
+test("@S0004-R05 JSON failures preserve exit codes and use stdout", async () => {
   const cli = await setup();
   for (const [args, code] of [
     [["config", "set", "LOG_LEVEL", "invalid"], 1],
@@ -87,7 +87,7 @@ test("@S0006-R05 JSON failures preserve exit codes and use stdout", async () => 
   expect(result.code).toBe(3);
   expect(result.data).toMatchObject({ error: expect.any(String) });
 });
-test("@S0006-R07 extra arguments and unknown options show command usage", async () => {
+test("@S0004-R07 extra arguments and unknown options show command usage", async () => {
   const cli = await setup();
   for (const args of [
     ["config", "get", "LOG_LEVEL", "extra"],
@@ -101,7 +101,7 @@ test("@S0006-R07 extra arguments and unknown options show command usage", async 
     expect(result.stderr).toContain("Usage: config get [name]");
   }
 });
-test("@S0006-R08 options before command apply to command", async () => {
+test("@S0004-R08 options before command apply to command", async () => {
   const cli = await setup();
   const help = await cli.run(["--help", "config"]);
   expect(help.code).toBe(0);
@@ -117,7 +117,7 @@ test("@S0006-R08 options before command apply to command", async () => {
   expect(argument.code).toBe(0);
   expect(argument.stdout.trim()).toBe("debug");
 });
-test("@S0006-R09 settings data include values and sources", async () => {
+test("@S0004-R09 settings data include values and sources", async () => {
   const cli = await setup();
   const result = await runJson(cli, ["config", "get"]);
   expect(result.data).toMatchObject({

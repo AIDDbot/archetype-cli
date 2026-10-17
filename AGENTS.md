@@ -20,7 +20,7 @@ An archetype that follows the AIDDbot Blueprint: a whole solution with a local c
 
 The cli is local: no server, no port, no `api` and no database. It keeps its settings in a JSON file that `CONFIG_FILE` selects, and writes its logs to `LOG_DIR`. Each acceptance test runs the cli with its arguments, its own configuration file and its own log folder, and reads the standard output, the standard error and the exit code. The identity of a system (`displayName`, `description`, `author`, `homepage`, `license`, `version`) is in the root `package.json`.
 
-`foundation/` holds the instance of each foundation spec for this system, with its ID: `S0001-scaffold`, `S0002-configuration`, `S0004-monitoring`, `S0006-shell`, `S0008-about` and `S0009-presentation`, in the delivery order of AIDDbot. The missing IDs were specs that repaired debt. A local cli has no users, so `users` is not delivered. Each acceptance test has the tag of its requirement (`@S0002-R01`). A system that starts from this archetype gets the same spec IDs, so the tags stay correct. `model/` holds the schema documents. The archetype carries no business feature.
+The repository is an AIDDbot system. `.product/specs/` holds the shipped foundation specs, numbered in their delivery order: `S0001-scaffold` (`chore`), then `S0002-configuration`, `S0003-monitoring`, `S0004-shell`, `S0005-about` and `S0006-presentation` (`feat`). The specs that repaired debt while the archetype was built are not here. A local cli has no users, so `users` is not delivered. `.product/PRD.md` lists the shipped features, and `.product/model/` holds the schema documents. Each acceptance test has the tag of its requirement (`@S0002-R01`). A system that starts from this archetype gets the same specs, so the tags stay correct, and AIDDbot gives its first business spec the next ID (`S0007`). The archetype carries no business feature.
 
 ## Common stack
 
@@ -101,12 +101,12 @@ The archetype enters or changes in this repository only when all of these are tr
 - In each project, `npm test`, `npm run layers` and `npm run crap` pass. The pre-commit hook (`vp staged`) passes.
 - `npm test` at the root, the unit tests and the full acceptance run, passes against the reference `cli`.
 - No test writes a file inside the repository: `git status` is clean after the full run.
-- Each requirement in `foundation/` has a test with its tag, and each tag names a requirement in `foundation/`.
-- The schema documents in `model/` match the code. AIDDbot copies them into each system and never derives them again.
+- Each requirement in `.product/specs/` has a test with its tag, and each tag names a requirement in `.product/specs/`. The spec IDs have no gaps.
+- The schema documents in `.product/model/` match the code. AIDDbot copies them into each system and never derives them again.
 - The archetype has no open technical debt and no exception in a `lint/` file. Debt in an archetype goes into each system that starts from it.
 - A boundary canary fails `layers`: a `core` file that imports a feature. Undo the canary.
 
-A new archetype of a type (for example a `cli` in a different language) passes the same `e2e` suite. Change the suite only when the foundation specs change: first change the instance in `foundation/`, then the tests, then the code.
+A new archetype of a type (for example a `cli` in a different language) passes the same `e2e` suite. Change the suite only when the foundation specs change: first change the spec in `.product/specs/`, then the tests, then the code.
 
 ## Versions
 

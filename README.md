@@ -9,7 +9,7 @@ An archetype for local command-line systems that [AIDDbot](https://aiddbot.com) 
 
 The cli is local: no server, no API and no database. It keeps its settings in a JSON file that `CONFIG_FILE` selects (default `./config.json`) and writes daily logs to `LOG_DIR` (default `./logs`). Commands: `config`, `about`, `help`, and the options `--json`, `--version` and `--help`.
 
-[`foundation/`](./foundation/) holds the instance of each foundation spec: scaffold, configuration, monitoring, shell, about and presentation. Each acceptance test has the tag of its requirement. [`model/`](./model/) holds the schema documents.
+The repository is an AIDDbot system: [`.product/specs/`](./.product/specs/) holds the shipped foundation specs (`S0001` scaffold to `S0006` presentation), [`.product/PRD.md`](./.product/PRD.md) lists them, and [`.product/model/`](./.product/model/) holds the schema documents. Each acceptance test has the tag of its requirement.
 
 Common tooling: npm workspaces and [Vite+](https://viteplus.dev) (format, lint, type check, Vitest, and the `vp staged` pre-commit hook).
 
@@ -41,7 +41,7 @@ npm test
 
 ## Contribute
 
-Read [`AGENTS.md`](./AGENTS.md). It holds the Blueprint and the gate that each archetype change must pass: green checks, a clean working tree after the full run, tags that match `foundation/`, and no open technical debt.
+Read [`AGENTS.md`](./AGENTS.md). It holds the Blueprint and the gate that each archetype change must pass: green checks, a clean working tree after the full run, tags that match `.product/specs/`, and no open technical debt.
 
 ## License
 

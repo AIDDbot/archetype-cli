@@ -5,7 +5,7 @@ import { createCliSetup } from "../../shared/projects/setup.ts";
 import { readTable } from "../../shared/table.read.ts";
 const setup = createCliSetup();
 
-test("@S0009-R02 @S0006-R07 config get rejects extra arguments and unknown options", async () => {
+test("@S0006-R02 @S0004-R07 config get rejects extra arguments and unknown options", async () => {
   const cli = await setup();
   for (const args of [
     ["config", "get", "LOG_LEVEL", "extra"],
@@ -42,7 +42,7 @@ test("@S0002-R02 invalid set preserves the file", async () => {
     expect(await readFile(cli.file, "utf8")).toBe(original);
   }
 });
-test("@S0002-R03 @S0009-R02 lists values and sources @S0002-R04 reads each setting", async () => {
+test("@S0002-R03 @S0006-R02 lists values and sources @S0002-R04 reads each setting", async () => {
   const cli = await setup();
   const result = await cli.run(["config", "get"]);
   expect(result.code).toBe(0);
@@ -60,7 +60,7 @@ test("@S0002-R03 @S0009-R02 lists values and sources @S0002-R04 reads each setti
     );
   }
 });
-test("@S0002-R03 @S0009-R02 reports environment and file origins", async () => {
+test("@S0002-R03 @S0006-R02 reports environment and file origins", async () => {
   const cli = await setup();
   await writeFile(cli.file, '{"LOG_LEVEL":"warn"}');
   const result = await cli.run(["config", "get"], {
@@ -134,7 +134,7 @@ test("@S0002-R09 CONFIG_FILE in the file cannot redirect it", async () => {
   expect((await cli.run(["config", "get", "CONFIG_FILE"])).output).toContain(cli.file);
   expect((await cli.run(["config", "get", "LOG_LEVEL"])).output).toContain("debug");
 });
-test("@S0002-R07 resolves paths from the project folder @S0002-R03 @S0009-R02 defaults", async () => {
+test("@S0002-R07 resolves paths from the project folder @S0002-R03 @S0006-R02 defaults", async () => {
   const cli = await setup();
   const copy = await cli.copy();
   const { project } = copy;

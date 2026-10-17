@@ -2,7 +2,7 @@
 id: S0001
 slug: scaffold
 key: S0001-scaffold
-type: chore # fix, chore
+type: chore
 branch: chore/S0001-scaffold
 domain: foundation
 ---

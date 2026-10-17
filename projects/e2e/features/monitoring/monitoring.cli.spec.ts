@@ -26,7 +26,7 @@ async function setup() {
 afterEach(async () => {
   await Promise.all(helpers.splice(0).map((cli) => cli.dispose()));
 });
-test("@S0004-R01 flushes a plain invocation record without argument values", async () => {
+test("@S0003-R01 flushes a plain invocation record without argument values", async () => {
   const cli = await setup();
   const value = join(cli.directory, "distinctive-value");
   expect((await cli.run(["config", "set", "LOG_DIR", value])).code).toBe(0);
@@ -34,7 +34,7 @@ test("@S0004-R01 flushes a plain invocation record without argument values", asy
   expect(logs).toMatch(/^\d{2}:\d{2}:\d{2}\.\d{3} cli INFO config exit=0 duration=\d+ms\n$/);
   expect(logs).not.toContain(value);
 });
-test("@S0004-R02 maps every exit code to its log level", async () => {
+test("@S0003-R02 maps every exit code to its log level", async () => {
   const cli = await setup();
   const cases = [
     { args: ["config", "get", "LOG_LEVEL"], code: 0, level: "INFO" },
@@ -51,12 +51,12 @@ test("@S0004-R02 maps every exit code to its log level", async () => {
     );
   }
 });
-test("@S0004-R03 filters information below warn", async () => {
+test("@S0003-R03 filters information below warn", async () => {
   const cli = await setup();
   expect((await cli.run(["config", "get"], { LOG_LEVEL: "warn" })).code).toBe(0);
   expect(await cli.logs()).toBe("");
 });
-test("@S0004-R04 @S0004-R08 @S0004-R09 separates streams and conceals invalid values", async () => {
+test("@S0003-R04 @S0003-R08 @S0003-R09 separates streams and conceals invalid values", async () => {
   const cli = await setup();
   const result = await cli.run(["config", "get", "LOG_LEVEL"]);
   expect(result.stdout.trim()).toBe("info");
@@ -71,13 +71,13 @@ test("@S0004-R04 @S0004-R08 @S0004-R09 separates streams and conceals invalid va
     expect(text).not.toMatch(/\n\s+at /);
   }
 });
-test("@S0004-R05 rejects unknown options as usage", async () => {
+test("@S0003-R05 rejects unknown options as usage", async () => {
   const cli = await setup();
   const result = await cli.run(["config", "get", "--no-such-option"]);
   expectFailure(result, 2);
   expect(result.stderr).toContain("--no-such-option");
 });
-test("@S0004-R06 reports invalid settings and unavailable configuration", async () => {
+test("@S0003-R06 reports invalid settings and unavailable configuration", async () => {
   const cli = await setup();
   const unavailable = await cli.run(["--config-file", cli.directory, "config", "get"]);
   expectFailure(unavailable, 3);
@@ -86,7 +86,7 @@ test("@S0004-R06 reports invalid settings and unavailable configuration", async 
   expectFailure(invalid, 3);
   expect(invalid.stderr).toContain("LOG_LEVEL");
 });
-test("@S0004-R07 rejects unknown settings as usage", async () => {
+test("@S0003-R07 rejects unknown settings as usage", async () => {
   const cli = await setup();
   const result = await cli.run(["config", "set", "NO_SUCH_SETTING", "value"]);
   expectFailure(result, 2);
