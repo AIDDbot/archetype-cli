@@ -1,52 +1,47 @@
 # Archetype CLI
 
-Reference archetypes for local command-line systems that [AIDDbot](https://aiddbot.com) scaffolds. Each archetype follows the AIDDbot Blueprint and implements its foundation specs for a local cli: configuration, monitoring and health. No archetype has a business feature.
+An archetype for local command-line systems that [AIDDbot](https://aiddbot.com) scaffolds: a whole solution that follows the AIDDbot Blueprint and implements its foundation specs for a local cli. It has no business feature.
 
 | Folder | Project type | Technology |
 | --- | --- | --- |
-| [`cli/`](./cli/) | `cli` | Framework-free TypeScript 7 on Node.js, local SQLite (`node:sqlite`) |
-| [`e2e/`](./e2e/) | `e2e` | Playwright Test with no browser; it is also the conformance suite of the archetypes |
+| [`projects/cli/`](./projects/cli/) | `cli` | Framework-free TypeScript on Node.js |
+| [`projects/e2e/`](./projects/e2e/) | `e2e` | Vitest with no browser; it is also the conformance suite of the archetype |
 
-The cli is local: no server and no back-end API. It keeps its data in a SQLite file that `DATABASE_URL` selects (default `./data/cli.sqlite`).
+The cli is local: no server, no API and no database. It keeps its settings in a JSON file that `CONFIG_FILE` selects (default `./config.json`) and writes daily logs to `LOG_DIR` (default `./logs`). Commands: `config`, `about`, `help`, and the options `--json`, `--version` and `--help`.
 
-[`foundation/`](./foundation/) holds the instance of each foundation spec (`S0001`–`S0003`). Each acceptance test has the tag of its requirement. [`model/`](./model/) holds the schema documents of the archetypes: the conceptual model and the database of `cli`.
+[`foundation/`](./foundation/) holds the instance of each foundation spec: scaffold, configuration, monitoring, shell, about and presentation. Each acceptance test has the tag of its requirement. [`model/`](./model/) holds the schema documents.
 
-Common tooling: npm, oxlint (lint, type check, layer boundaries and quality limits), oxfmt, and the Node.js test runner.
+Common tooling: npm workspaces and [Vite+](https://viteplus.dev) (format, lint, type check, Vitest, and the `vp staged` pre-commit hook).
 
-## Use an archetype
+## Use the archetype
 
-AIDDbot copies the archetypes for you when it founds a system. To copy one by hand:
+AIDDbot copies the archetype for you when it founds a system. To copy it by hand:
 
 ```sh
-npx degit AIDDbot/archetype-cli/cli cli
+npx degit AIDDbot/archetype-cli#v{version} my-system
+cd my-system && npm ci
 ```
 
-Then put the identity of your system in the root `package.json` (`displayName`, `description`, `author`, `homepage`, `version`). The cli reads its version from there.
+`npm ci` runs `prepare`, which installs the pre-commit hook. Then put the identity of your system in the root `package.json` (`displayName`, `description`, `author`, `homepage`, `license`, `version`). The cli reads it from there.
 
 ## Versions
 
-Archetype CLI has the same version as AIDDbot, patch included: AIDDbot {version} pins `v{version}`. Each AIDDbot release publishes Archetype CLI first with its version, also when nothing changed here. Use that tag in the copy command, for example `npx degit AIDDbot/archetype-cli/cli#v{version} cli`.
+Archetype CLI has the `major.minor` and the codename of the AIDDbot release that pins it. It releases its patches on its own.
 
-## Run the archetypes
+## Run the archetype
 
 Requirements: Node.js 26 or later.
 
 ```sh
-cd cli && npm ci && cd ..
-cd e2e && npm ci && cd ..
+npm ci
+npm test
 ```
 
-In each project: `npm test` (unit tests in `cli`, acceptance in `e2e`), `npm run lint`, `npm run quality` and `npm run format`. Run a command with `npm start -- health` in `cli/`. Copy `.env.example` to `.env` to change a setting.
-
-The acceptance suite runs the cli itself, with a temporary database for each test:
-
-```sh
-cd e2e && npm test
-```
+`npm test` at the root runs the unit tests of `cli` and the full acceptance suite of `e2e`. In each project: `npm test`, `npm run layers` (import boundaries) and `npm run crap` (complexity and coverage). Run a command with `npm start -- about` in `projects/cli/`.
 
 ## Contribute
 
-Read [`AGENTS.md`](./AGENTS.md). It holds the Blueprint and the gate that each archetype change must pass: green checks, a `quality` run with no warning, a green acceptance run, and no open technical debt.
+Read [`AGENTS.md`](./AGENTS.md). It holds the Blueprint and the gate that each archetype change must pass: green checks, a clean working tree after the full run, tags that match `foundation/`, and no open technical debt.
 
 ## License
 

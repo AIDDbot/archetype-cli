@@ -1,0 +1,16 @@
+{
+  "name": "e2e",
+  "version": "1.0.0",
+  "private": true,
+  "description": "",
+  "type": "module",
+  "scripts": {
+    "upgrade": "npm-check-updates -u --packageFile ../../package.json && npm install --prefix ../..",
+    "test": "vp test run --passWithNoTests",
+    "test:spec": "vp test run --passWithNoTests -t",
+    "start": "vp test --passWithNoTests",
+    "layers": "vp lint -c lint/layers.json",
+    "crap:complexity": "vp lint -c lint/crap.json",
+    "crap": "npm run crap:complexity"
+  }
+}

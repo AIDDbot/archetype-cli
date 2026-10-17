@@ -1,3 +1,0 @@
-CREATE TABLE runs (
-  id INTEGER PRIMARY KEY
-);

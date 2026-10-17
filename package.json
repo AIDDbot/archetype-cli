@@ -1,15 +1,32 @@
 {
   "name": "archetype-cli",
   "displayName": "Archetype CLI",
-  "description": "Reference archetypes that follow the AIDDbot Blueprint: a local command-line application and its acceptance suite.",
-  "version": "0.3.13",
-  "codename": "Columbus",
+  "version": "0.4.0",
   "private": true,
-  "license": "MIT",
-  "author": "AIDDbot",
+  "description": "A local command-line application and its acceptance suite",
   "homepage": "https://aiddbot.com",
+  "license": "MIT",
+  "author": {
+    "name": "Alberto Basalo",
+    "url": "https://x.com/albertobasalo"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/AIDDbot/archetype-cli.git"
-  }
+  },
+  "workspaces": [
+    "projects/*"
+  ],
+  "type": "module",
+  "scripts": {
+    "prepare": "vp config",
+    "test": "vp run -r test"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.5",
+    "@vitest/coverage-v8": "^5.0.5",
+    "npm-check-updates": "^23.1.1",
+    "vite-plus": "^1.3.0"
+  },
+  "codename": "Halloween"
 }
