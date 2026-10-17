@@ -3,9 +3,9 @@ import { join } from "node:path";
 import { formatDate, formatTime } from "../shared/dates.format.ts";
 import type { Logger, LogLevel } from "../shared/output/logger.type.ts";
 const levels = ["debug", "info", "warn", "error"];
-interface LogOutput {
-  mkdir: typeof mkdir;
-  appendFile: typeof appendFile;
+export interface LogOutput {
+  mkdir(path: string, options: { recursive: true }): Promise<unknown>;
+  appendFile(path: string, data: string): Promise<void>;
   error(message: string): void;
 }
 export function formatLog(input: { date: Date; level: LogLevel; message: string }) {
@@ -25,11 +25,12 @@ export function createLogger(
       if (isVisible && !options.quietConsole) output.error(line);
       const { directory } = options;
       if (directory === undefined) return;
+      const write = async () => {
+        await output.mkdir(directory, { recursive: true });
+        await output.appendFile(join(directory, `${formatDate(date)}.log`), `${line}\n`);
+      };
       queue = queue
-        .then(async () => {
-          await output.mkdir(directory, { recursive: true });
-          await output.appendFile(join(directory, `${formatDate(date)}.log`), `${line}\n`);
-        })
+        .then(() => write())
         .catch(() => {
           /* Logging must not block a command. */
         });

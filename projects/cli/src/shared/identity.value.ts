@@ -1,3 +1,4 @@
+import { isRecord, isText } from "./checks.guard.ts";
 export interface PackageIdentity {
   name: string;
   displayName?: string;
@@ -6,6 +7,12 @@ export interface PackageIdentity {
   homepage: string;
   version: string;
   workspaces?: string[];
+}
+
+export function isPackageIdentity(value: unknown): value is PackageIdentity {
+  if (!isRecord(value)) return false;
+  const required = [value.name, value.description, value.homepage, value.version];
+  return required.every(isText);
 }
 
 export function createIdentity(metadata: PackageIdentity) {

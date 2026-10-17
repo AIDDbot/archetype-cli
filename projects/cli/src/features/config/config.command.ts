@@ -23,7 +23,7 @@ export function registerConfig(): CommandRegistration {
             kind: "list",
             records: "settings",
             columns: ["Setting", "Value", "Source"],
-            rows: data.settings.map(({ name, value, source }) => [name, value, source]),
+            rows: data.settings.map((setting) => [setting.name, setting.value, setting.source]),
           },
         };
       }

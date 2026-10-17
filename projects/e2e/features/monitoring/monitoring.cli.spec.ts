@@ -44,7 +44,7 @@ test("@S0004-R02 maps every exit code to its log level", async () => {
   ];
   for (const item of cases) {
     const result = await cli.run(item.args);
-    if (item.code === 0) expect(result.code).toBe(0);
+    expect(result.code).toBe(item.code);
     if (item.code !== 0) expectFailure(result, item.code);
     expect((await cli.logs()).trim().split("\n").at(-1)).toContain(
       ` cli ${item.level} config exit=${item.code} `,
@@ -88,5 +88,7 @@ test("@S0004-R06 reports invalid settings and unavailable configuration", async 
 });
 test("@S0004-R07 rejects unknown settings as usage", async () => {
   const cli = await setup();
-  expectFailure(await cli.run(["config", "set", "NO_SUCH_SETTING", "value"]), 2);
+  const result = await cli.run(["config", "set", "NO_SUCH_SETTING", "value"]);
+  expectFailure(result, 2);
+  expect(result.stderr).toContain("NO_SUCH_SETTING");
 });

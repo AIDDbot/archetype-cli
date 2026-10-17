@@ -1,7 +1,7 @@
 import { expect, test, vi } from "vite-plus/test";
 import { join, parse } from "node:path";
 import { readIdentity } from "./identity.search.ts";
-import { createIdentity, type PackageIdentity } from "./identity.value.ts";
+import { createIdentity, isPackageIdentity, type PackageIdentity } from "./identity.value.ts";
 
 const metadata: PackageIdentity = {
   name: "package-name",
@@ -51,4 +51,10 @@ test("identity search reports missing workspace metadata before reading the root
     "Application package.json is unavailable",
   );
   expect(readWorkspace.mock.calls).toEqual([[directory]]);
+});
+
+test("identity metadata needs name, description, homepage and version as text", () => {
+  expect(isPackageIdentity(metadata)).toBe(true);
+  expect(isPackageIdentity({ ...metadata, version: 2 })).toBe(false);
+  expect(isPackageIdentity("package")).toBe(false);
 });

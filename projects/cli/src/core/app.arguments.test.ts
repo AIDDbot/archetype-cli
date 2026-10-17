@@ -13,8 +13,8 @@ test("arguments map options to settings and preserve command words", () => {
 
 test("arguments reject unknown options and missing option values", () => {
   const input = { definitions, options: [] };
-  expect(() => parseShellArguments(["--unknown"], input)).toThrow();
-  expect(() => parseShellArguments(["--log-level"], input)).toThrow();
+  expect(() => parseShellArguments(["--unknown"], input)).toThrow("Unknown option --unknown");
+  expect(() => parseShellArguments(["--log-level"], input)).toThrow("Invalid command options");
 });
 
 test("shell arguments parse flags and options with values", () => {

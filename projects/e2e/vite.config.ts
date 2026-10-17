@@ -1,5 +1,6 @@
-import "./core/settings.ts";
 import { defineConfig } from "vite-plus";
+import { checkSettings } from "./core/settings.ts";
+checkSettings();
 export default defineConfig({
   test: {
     name: "e2e",

@@ -1,7 +1,14 @@
 import { expect, test, vi } from "vite-plus/test";
-import { createLogger, formatLog } from "./app.logger.ts";
+import { createLogger, formatLog, type LogOutput } from "./app.logger.ts";
 import { runApplication } from "./app.lifecycle.ts";
 import { ExpectedError } from "../shared/errors/expected.error.ts";
+import type { Logger } from "../shared/output/logger.type.ts";
+function fakeLogger() {
+  return { log: vi.fn<Logger["log"]>(), stop: vi.fn<Logger["stop"]>(async () => {}) };
+}
+function sink() {
+  return vi.fn<(message: string) => void>();
+}
 test("converts each line break to a separator", () => {
   expect(
     formatLog({
@@ -14,9 +21,9 @@ test("converts each line break to a separator", () => {
 test.each(["result", undefined])(
   "successful invocation outputs %s and stops logging",
   async (result) => {
-    const logger = { log: vi.fn(), stop: vi.fn(async () => {}) };
-    const output = vi.fn();
-    const error = vi.fn();
+    const logger = fakeLogger();
+    const output = sink();
+    const error = sink();
     expect(
       await runApplication(async () => result, { command: "cli", logger, output, error }),
     ).toBe(0);
@@ -34,12 +41,12 @@ test.each([
   { kind: "usage", code: 2, level: "warn" },
   { kind: "unavailable", code: 3, level: "error" },
 ] as const)("expected $kind failure uses exit $code", async ({ kind, code, level }) => {
-  const logger = { log: vi.fn(), stop: vi.fn(async () => {}) };
-  const error = vi.fn();
+  const logger = fakeLogger();
+  const error = sink();
   const action = async () => {
     throw new ExpectedError(kind, "Cannot continue");
   };
-  expect(await runApplication(action, { command: "config", logger, output: vi.fn(), error })).toBe(
+  expect(await runApplication(action, { command: "config", logger, output: sink(), error })).toBe(
     code,
   );
   expect(error).toHaveBeenCalledExactlyOnceWith("error: Cannot continue");
@@ -50,7 +57,7 @@ test.each([
   expect(logger.stop).toHaveBeenCalledOnce();
 });
 test("non-error failures log a safe cause", async () => {
-  const logger = { log: vi.fn(), stop: vi.fn(async () => {}) };
+  const logger = fakeLogger();
   await runApplication(
     async () => {
       throw "private detail";
@@ -58,8 +65,8 @@ test("non-error failures log a safe cause", async () => {
     {
       command: "cli",
       logger,
-      output: vi.fn(),
-      error: vi.fn(),
+      output: sink(),
+      error: sink(),
     },
   );
   expect(logger.log).toHaveBeenCalledWith("error", "Unexpected failure cause: Non-error exception");
@@ -67,9 +74,9 @@ test("non-error failures log a safe cause", async () => {
 
 function logOutput() {
   return {
-    mkdir: vi.fn(async () => undefined),
-    appendFile: vi.fn(async () => {}),
-    error: vi.fn(),
+    mkdir: vi.fn<LogOutput["mkdir"]>(async () => undefined),
+    appendFile: vi.fn<LogOutput["appendFile"]>(async () => {}),
+    error: sink(),
   };
 }
 test("logger filters levels, writes lines in order and mirrors warnings and errors", async () => {
@@ -110,13 +117,13 @@ test("logger recovers from failed writes and flushes later entries", async () =>
   );
 });
 test("unexpected failures have a safe console message and flush their cause", async () => {
-  const logger = { log: vi.fn(), stop: vi.fn(async () => {}) };
-  const error = vi.fn();
+  const logger = fakeLogger();
+  const error = sink();
   const code = await runApplication(
     async () => {
       throw new TypeError("password=secret");
     },
-    { command: "config", logger, output: vi.fn(), error },
+    { command: "config", logger, output: sink(), error },
   );
   expect(code).toBe(1);
   expect(error).toHaveBeenCalledExactlyOnceWith("error: Unexpected failure");
