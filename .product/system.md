@@ -30,4 +30,4 @@ The system has no user accounts.
 
 ## Scaffold
 
-The `scaffold` spec of `.product/blueprint/foundation/` makes each project.
+The spec `S0001-scaffold` made each project.
