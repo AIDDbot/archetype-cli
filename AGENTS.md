@@ -30,7 +30,7 @@ The cli is local: no server, no port, no `api` and no database. It keeps its set
 - **Main dependencies**: Node.js standard library — platform; Vite+ — tooling. The closed list: no other dependency, unless a spec names it
 - **Package manager**: npm
 - **Pre-commit hook**: `vp staged` — formats, lints and type-checks the staged files with safe fixes, and runs the unit tests that they affect
-- **Tooling**: `upgrade` `npm run upgrade`; `test` `npm test`; `start` `npm start`; `layers` `npm run layers`; `crap` `npm run crap:complexity` — Vite+ / npm
+- **Tooling**: `upgrade` `npm run upgrade`; `test` `npm test`; `start` `npm start`; `layers` `npm run layers`; `crap` `npm run crap` — Vite+ / npm
 - Use erasable TypeScript syntax because Node.js runs source files. Inject external services through shared contracts.
 
 ## Blueprint

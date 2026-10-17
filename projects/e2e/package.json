@@ -10,7 +10,6 @@
     "test:spec": "vp test run --passWithNoTests -t",
     "start": "vp test --passWithNoTests",
     "layers": "vp lint -c lint/layers.json",
-    "crap:complexity": "vp lint -c lint/crap.json",
-    "crap": "npm run crap:complexity"
+    "crap": "vp lint -c lint/crap.json"
   }
 }

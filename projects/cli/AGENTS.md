@@ -18,7 +18,7 @@ Use the Common stack of the root `AGENTS.md`.
 | Slot | Blocks | Command | Tool |
 | --- | --- | --- | --- |
 | `test:spec` | Yes | n/a: no acceptance tests | Vite+ / npm |
-| `crap` | No | `npm run crap:complexity`; `npm run crap:coverage` | Vite+ / npm |
+| `crap` | No | `vp lint -c lint/crap.json`; `vp test run --coverage` (both: `npm run crap`) | Vite+ |
 
 ## 4 · Architecture
 

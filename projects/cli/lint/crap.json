@@ -1,3 +1,3 @@
 {
-  "extends": ["../../lint/complexity.json"]
+  "extends": ["../../../.lint/complexity.json"]
 }
