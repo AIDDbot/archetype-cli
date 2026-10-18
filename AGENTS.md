@@ -37,36 +37,18 @@ The repository is an AIDDbot system: `.product/PRD.md` lists the shipped foundat
 
 All projects obey these principles. Each project `AGENTS.md` gives its architecture (containers, layers, tests), its data and the limits that its archetype changes. Do not explore the code to learn the setup. First make it work, then make it correct: only the pre-commit hook of the technology (lint and format) and `test` (the unit tests, and the acceptance suite of `e2e`) block a delivery, and a security finding gets one repair first. Any other violation is debt.
 
-### System
-
-- `api` owns the data. Only it connects to persistence. `web` and `cli` get data only through `api`. Exception: an application in a system with no `api`, such as a `cli`, a desktop or a mobile application, owns its local data.
-- REST API: paths start with `/api`; a resource is a plural noun; a singleton resource is a singular noun, such as `/api/health`. JSON bodies, ISO 8601 dates, `Authorization: Bearer <token>`. Status codes: 200, 201, 204, 400, 401, 403, 404, 409, 413, 500. Every error has the body `{ "error": "<message>" }`; an input error adds `fields`. An error never shows a stack, SQL or a path.
-- Security: no secrets in the code or the repository; a password only as a salted hash; check each input at the edge.
-
 ### Code
 
-- `crap` checks the limits of functions and files in `.lint/complexity*.json`; `layers` checks at most 16 entries in a folder. A callback whose signature the framework sets (such as a middleware) sits in the file that the shared limits allow for it (`src/core/{concern}.middleware.ts`): no lint comment and no exception in `.lint/`. A folder over the limit has more than one concern: divide it by concern.
-- One type for each domain concept, never a bare string, number, object or array. A value object for a value with rules, made at the edge. A closed type for a closed set. Composition, not inheritance. Generic types in `shared`, domain types in their feature.
-- DRY: `shared` has one function to check, convert or format each common type. Look there before you write one. `layers` reports each duplicated block of code as debt.
-- One source for each definition: a default, an option, a usage text or a list of names is data in one place. Help, checks and error messages read it. Never parse a display text to get the data again.
-- Names: idiomatic, words of the domain.
-- Errors: never hide them. Catch only at the edges: the error handler of `core`, and `data` when it changes an external failure into the expected error.
-- Configuration from outside the code. Query statements as named constants in the `data` file that uses them. Migrations as numbered files.
+- Limits: `crap` checks `.lint/complexity*.json`; `layers` checks 16 entries in a folder. A framework callback (such as a middleware) goes in `core/{concern}.middleware.ts`, never a lint comment or an exception in `.lint/`. A folder over the limit: divide it by concern.
+- One type for each domain concept, never a bare primitive. Generic types in `shared`, domain types in their feature.
+- `shared` has one function to check, convert or format each common type: look there before you write one.
+- One source for each definition: a default, an option, a usage text or a list of names is data in one place. Never parse a display text to get the data again.
+- Catch errors only at the edges: the error handler of `core`, and `data` when it changes an external failure into the expected error.
 - No check, limit or default value that the spec does not state.
 
 ## Archetype gate
 
-The archetype enters or changes in this repository only when all of these are true:
-
-- `npm test` at the root (the unit tests and the full acceptance run), and `layers` and `crap` in each project, pass. The pre-commit hook passes.
-- No test writes a file inside the repository: `git status` is clean after the full run.
-- Each requirement in `.product/specs/` has a test with its tag, and each tag names a requirement in `.product/specs/`. The spec IDs have no gaps.
-- The schema documents in `.product/model/` match the code. AIDDbot copies them into each system and never derives them again.
-- No open technical debt and no exception in `.lint/`: debt in an archetype goes into each system that starts from it.
-- Each `AGENTS.md` has fewer than 100 lines.
-- A boundary canary fails `layers`: a `core` file that imports a feature. Undo the canary.
-
-A new archetype of a type (for example a `cli` in a different language) passes the same `e2e` suite. Change the suite only when the foundation specs change: first change the spec in `.product/specs/`, then the tests, then the code.
+Changes pass the archetype gate of [the Builder](https://github.com/AIDDbot/archetype-builder/blob/main/seed.md).
 
 ## Versions
 
