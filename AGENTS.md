@@ -46,15 +46,13 @@ All projects obey these principles. Each project `AGENTS.md` gives its architect
 ### Code
 
 - `crap` checks the limits of functions and files in `.lint/complexity*.json`; `layers` checks at most 16 entries in a folder. A callback whose signature the framework sets (such as a middleware) sits in the file that the shared limits allow for it (`src/core/{concern}.middleware.ts`): no lint comment and no exception in `.lint/`. A folder over the limit has more than one concern: divide it by concern.
-- Strictest typed form of the language and its strictest type check. One type for each domain concept, never a bare string, number, object or array. A value object for a value with rules, made at the edge; it checks only what the spec states. A closed type for a closed set: an enum or a union of literals, as the type check permits. Composition, not inheritance. Generic types in `shared`, domain types in their feature.
+- One type for each domain concept, never a bare string, number, object or array. A value object for a value with rules, made at the edge. A closed type for a closed set. Composition, not inheritance. Generic types in `shared`, domain types in their feature.
 - DRY: `shared` has one function to check, convert or format each common type. Look there before you write one. `layers` reports each duplicated block of code as debt.
 - One source for each definition: a default, an option, a usage text or a list of names is data in one place. Help, checks and error messages read it. Never parse a display text to get the data again.
-- Names: idiomatic, words of the domain. A function is a verb. A boolean is a question (`isActive`, `canEdit`). No negative names, no abbreviations except standard ones.
-- Early returns; no `else` on the main path. A long or deep block: a function with a domain name. More than one logical operator: a named variable or predicate. More than two values: one typed object.
+- Names: idiomatic, words of the domain.
 - Errors: never hide them. Catch only at the edges: the error handler of `core`, and `data` when it changes an external failure into the expected error.
-- Configuration from outside the code. Query statements as named constants in the `data` file that uses them. Migrations as numbered files. A dependency only with the package manager.
+- Configuration from outside the code. Query statements as named constants in the `data` file that uses them. Migrations as numbered files.
 - No check, limit or default value that the spec does not state.
-
 
 ## Archetype gate
 
@@ -65,6 +63,7 @@ The archetype enters or changes in this repository only when all of these are tr
 - Each requirement in `.product/specs/` has a test with its tag, and each tag names a requirement in `.product/specs/`. The spec IDs have no gaps.
 - The schema documents in `.product/model/` match the code. AIDDbot copies them into each system and never derives them again.
 - No open technical debt and no exception in `.lint/`: debt in an archetype goes into each system that starts from it.
+- Each `AGENTS.md` has fewer than 100 lines.
 - A boundary canary fails `layers`: a `core` file that imports a feature. Undo the canary.
 
 A new archetype of a type (for example a `cli` in a different language) passes the same `e2e` suite. Change the suite only when the foundation specs change: first change the spec in `.product/specs/`, then the tests, then the code.
