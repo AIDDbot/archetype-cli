@@ -1,6 +1,6 @@
 # Archetype CLI — cli
 
-Obey the Blueprint of the root `AGENTS.md`. This file gives only the data of this project. Do not explore the code to learn the setup.
+Obey the Blueprint of the root `AGENTS.md`. This file gives the architecture and the data of this project. Do not explore the code to learn the setup.
 
 ## 1 · Purpose and boundary
 
@@ -34,6 +34,25 @@ The Common stack of the root `AGENTS.md`. Node.js runs `src/app.main.ts` with no
 | `data` | the configuration file, through `ConfigurationStorage` of `shared` |
 
 **Services of `core`**: arguments of each registration, typed by the contracts in `src/shared/{concern}/`.
+
+### Containers and layers
+
+| Container | Is | Never |
+| --- | --- | --- |
+| `core` | The platform that the framework or the entry calls one time at startup: server or shell, router, connections, error handler, global styles. | Business rules. Imports of a feature. |
+| `shared` | Generic elements with no domain, and the contracts of the services that features need (such as the logger, the HTTP client or the error type). Primitives at the root, other elements in folders by technical concern (`http`, `database`). | Domain words. Imports of `core` or of a feature. Folders `utils`, `helpers`, `common`, `misc`. |
+| feature | One flat folder for one unit of business value. The role in each file name tells its layer. | Subfolders. Imports of `core`. Imports of a different feature, except its facade. |
+| composition | The entry. It starts `core`, registers each feature by name in one explicit list (the manifest), and gives the features the services of `core` through the contracts of `shared`. The only part that knows `core` and the features. | Automatic discovery: folder scans, global decorators, file-based routers. |
+
+- composition → `presentation` → `logic` → `data`. A different feature → `facade` → `logic`. A layer never skips the next one: only the registration creates `data` and gives it to `logic`.
+- `presentation`: input, output and the registration of the feature (route, page, command). No business rules. Only the composition imports it.
+- `facade`: the public functions and types for other features. Only other features import it. A feature that gives nothing has no facade.
+- `logic`: rules and decisions. It does not know how data is stored.
+- `data`: all that the project reads or writes outside itself (database, remote API, files).
+- Types are not a layer. Each layer can use types, `shared` and the facades of other features.
+- A broken boundary is `medium` debt.
+- A feature that the manifest loads on demand has no other import. Tests start the application through the composition, without a port.
+- Unit tests prove `logic`, at least one for each business rule, with a fake `data`. They also prove `shared` and `core`. They are fast and independent, and touch no disk, database, network or process: the acceptance tests prove `data`. The pre-commit hook runs the ones that a commit affects. A business rule without a unit test is debt.
 
 ## 5 · Folder structure
 

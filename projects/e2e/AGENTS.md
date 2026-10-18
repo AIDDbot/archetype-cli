@@ -1,6 +1,6 @@
 # Archetype CLI — e2e
 
-Obey the Blueprint of the root `AGENTS.md`. This file gives only the data of this project. Do not explore the code to learn the setup.
+Obey the Blueprint of the root `AGENTS.md`. This file gives the architecture and the data of this project. Do not explore the code to learn the setup.
 
 ## 1 · Purpose and boundary
 
@@ -30,6 +30,12 @@ The Common stack of the root `AGENTS.md`. Vitest runs the suite; the `cli` runs 
 | `core` | the settings check |
 | features | one folder for each feature of the system, with `*.cli.spec.ts` |
 | `shared` | `projects/` (the settings and the client of the `cli`), `test-data/`, the readers of tables and records |
+
+### Suite
+
+- `e2e` has no layers, no manifest, no composition and no unit tests. The runner is the entry, and each run proves its `core`: the life cycle of the suite (setup, teardown, startup check of the projects).
+- An acceptance test proves one requirement. Its name contains the identifier of that requirement.
+- An e2e test uses only the API, the screens and the commands. It starts each project only with its start command, and never injects code into its process. It never uses `core` or a different feature. Only the migration tests of `configuration` open the database. Each test makes its own data with unique values. One browser engine (Chromium), unless the system asks for more.
 
 ## 5 · Folder structure
 
