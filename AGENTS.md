@@ -9,7 +9,7 @@ An archetype of AIDDbot: a whole solution with a local command-line application 
 ## Environment
 
 - **Git**: default branch `main`.
-- **Runtime**: Node.js 26 or later, npm only. One npm workspace at the root, with each project in `projects/`.
+- **Runtime**: Node.js 26 or later, npm only. One npm workspace: the shared tooling at the root, each project in `projects/`.
 
 ## Projects
 
@@ -22,16 +22,14 @@ The identity of a system (`displayName`, `description`, `author`, `homepage`, `l
 
 ## Product
 
-The repository is an AIDDbot system. `.product/specs/` holds the shipped foundation specs, `S0001-scaffold` to `S0006-presentation`, in delivery order and with no gaps; `.product/PRD.md` lists them, and `.product/model/` holds the schema documents. A local cli has no users, so `users` is not delivered. Each acceptance test has the tag of its requirement (`@S0002-R01`). A system that starts from the archetype keeps the specs and their tags, and its first business spec is `S0007`.
+The repository is an AIDDbot system: `.product/PRD.md` lists the shipped foundation specs of `.product/specs/` (`S0001` to `S0006`; no `users`, because a local cli has none), and `.product/model/` holds the schema documents. A system that starts from the archetype keeps the specs and their tags; its first business spec is `S0007`.
 
 ## Common stack
 
 - **Language**: TypeScript 7, on Node.js with no build and no framework. Use erasable syntax.
 - **Dependencies**: the Node.js standard library and Vite+. The list is closed: no other dependency unless a spec names it.
-- **Pre-commit hook**: `vp staged` formats, lints and type-checks the staged files with safe fixes, and runs the unit tests that they affect. The lint goes by packages: `correctness` and `suspicious`, with the one extra rule `no-non-null-assertion`.
-- **Debt checks**: `.lint/` at the root holds them all: `boundaries.json` and `boundaries.e2e.json` (`layers`), `complexity.json` and `complexity.e2e.json` (`crap`). No project has a `lint/` folder; its scripts point to `../../.lint/`.
-- **Upgrade**: one `upgrade` script at the root raises every dependency, majors included.
-- Inject external services through the contracts of `shared`.
+- **Pre-commit hook**: `vp staged` formats, lints and type-checks the staged files with safe fixes, and runs the unit tests that they affect.
+- **Debt checks**: in `.lint/` at the root. The scripts `layers` and `crap` of each project point there.
 
 ## Blueprint
 
@@ -83,7 +81,7 @@ All projects obey these principles. A project `AGENTS.md` gives only its own dat
 | Lines in a file | 128 | 256 |
 | Entries in a folder | 16 | 16 |
 
-- `crap` checks the limits of functions and files, and `layers` the entries in a folder. A callback whose signature the framework sets (such as a middleware) is outside the parameter limit: disable the limit for it with a lint comment. A folder over the limit has more than one concern: divide it by concern.
+- `crap` checks the limits of functions and files, and `layers` the entries in a folder. A callback whose signature the framework sets (such as a middleware) sits in the file that the shared limits allow for it (`src/core/{concern}.middleware.ts`): no lint comment and no exception in `lint/`. A folder over the limit has more than one concern: divide it by concern.
 - Strictest typed form of the language and its strictest type check. One type for each domain concept, never a bare string, number, object or array. A value object for a value with rules, made at the edge; it checks only what the spec states. A closed type for a closed set: an enum or a union of literals, as the type check permits. Composition, not inheritance. Generic types in `shared`, domain types in their feature.
 - DRY: `shared` has one function to check, convert or format each common type. Look there before you write one. `layers` reports each duplicated block of code as debt.
 - One source for each definition: a default, an option, a usage text or a list of names is data in one place. Help, checks and error messages read it. Never parse a display text to get the data again.
@@ -98,12 +96,11 @@ All projects obey these principles. A project `AGENTS.md` gives only its own dat
 
 The archetype enters or changes in this repository only when all of these are true:
 
-- In each project, `npm test`, `npm run layers` and `npm run crap` pass. The pre-commit hook (`vp staged`) passes.
-- `npm test` at the root, the unit tests and the full acceptance run, passes against the reference `cli`.
+- `npm test` at the root (the unit tests and the full acceptance run), and `layers` and `crap` in each project, pass. The pre-commit hook passes.
 - No test writes a file inside the repository: `git status` is clean after the full run.
 - Each requirement in `.product/specs/` has a test with its tag, and each tag names a requirement in `.product/specs/`. The spec IDs have no gaps.
 - The schema documents in `.product/model/` match the code. AIDDbot copies them into each system and never derives them again.
-- The archetype has no open technical debt and no exception in a `.lint/` file. Debt in an archetype goes into each system that starts from it.
+- No open technical debt and no exception in `.lint/`: debt in an archetype goes into each system that starts from it.
 - A boundary canary fails `layers`: a `core` file that imports a feature. Undo the canary.
 
 A new archetype of a type (for example a `cli` in a different language) passes the same `e2e` suite. Change the suite only when the foundation specs change: first change the spec in `.product/specs/`, then the tests, then the code.
