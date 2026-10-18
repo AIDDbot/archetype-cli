@@ -19,7 +19,7 @@ The Common stack of the root `AGENTS.md`. Node.js runs `src/app.main.ts` with no
 | `test:spec` | n/a | n/a: no acceptance tests |
 | `start` | No | `npm start -- {arguments}` |
 | `layers` | No | `npm run layers` |
-| `crap` | No | `vp lint -c lint/crap.json`; `vp test run --coverage` |
+| `crap` | No | `npm run crap` |
 | `upgrade` | No | `npm --prefix ../.. run upgrade` |
 
 ## 4 · Architecture

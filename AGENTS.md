@@ -29,7 +29,7 @@ The repository is an AIDDbot system. `.product/specs/` holds the shipped foundat
 - **Language**: TypeScript 7, on Node.js with no build and no framework. Use erasable syntax.
 - **Dependencies**: the Node.js standard library and Vite+. The list is closed: no other dependency unless a spec names it.
 - **Pre-commit hook**: `vp staged` formats, lints and type-checks the staged files with safe fixes, and runs the unit tests that they affect. The lint goes by packages: `correctness` and `suspicious`, with the one extra rule `no-non-null-assertion`.
-- **Limits**: `complexity.json` and `complexity.tests.json` at the root; each project extends them in its `lint/crap.json`.
+- **Debt checks**: `.lint/` at the root holds them all: `boundaries.json` and `boundaries.e2e.json` (`layers`), `complexity.json` and `complexity.e2e.json` (`crap`). No project has a `lint/` folder; its scripts point to `../../.lint/`.
 - **Upgrade**: one `upgrade` script at the root raises every dependency, majors included.
 - Inject external services through the contracts of `shared`.
 
@@ -103,7 +103,7 @@ The archetype enters or changes in this repository only when all of these are tr
 - No test writes a file inside the repository: `git status` is clean after the full run.
 - Each requirement in `.product/specs/` has a test with its tag, and each tag names a requirement in `.product/specs/`. The spec IDs have no gaps.
 - The schema documents in `.product/model/` match the code. AIDDbot copies them into each system and never derives them again.
-- The archetype has no open technical debt and no exception in a `lint/` file. Debt in an archetype goes into each system that starts from it.
+- The archetype has no open technical debt and no exception in a `.lint/` file. Debt in an archetype goes into each system that starts from it.
 - A boundary canary fails `layers`: a `core` file that imports a feature. Undo the canary.
 
 A new archetype of a type (for example a `cli` in a different language) passes the same `e2e` suite. Change the suite only when the foundation specs change: first change the spec in `.product/specs/`, then the tests, then the code.

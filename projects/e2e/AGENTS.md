@@ -19,7 +19,7 @@ The Common stack of the root `AGENTS.md`. Vitest runs the suite; the `cli` runs 
 | `test:spec` | Yes | `npm run test:spec`: the core adds the tag, such as `@S0002-` |
 | `start` | No | `npm start`: watch mode, for a human only |
 | `layers` | No | `npm run layers` |
-| `crap` | No | `vp lint -c lint/crap.json` |
+| `crap` | No | `npm run crap` |
 | `upgrade` | No | `npm --prefix ../.. run upgrade` |
 
 ## 4 · Architecture

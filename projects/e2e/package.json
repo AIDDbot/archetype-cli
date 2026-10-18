@@ -8,7 +8,7 @@
     "start": "vp test --passWithNoTests",
     "test": "vp test run --passWithNoTests",
     "test:spec": "vp test run --passWithNoTests -t",
-    "layers": "vp lint -c lint/layers.json",
-    "crap": "vp lint -c lint/crap.json"
+    "layers": "vp lint -c ../../.lint/boundaries.e2e.json",
+    "crap": "vp lint -c ../../.lint/complexity.e2e.json"
   }
 }

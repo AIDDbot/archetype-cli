@@ -10,7 +10,7 @@
   "scripts": {
     "start": "node src/app.main.ts",
     "test": "vp test run",
-    "layers": "vp lint -c lint/layers.json",
-    "crap": "vp lint -c lint/crap.json && vp test run --coverage"
+    "layers": "vp lint -c ../../.lint/boundaries.json",
+    "crap": "vp lint -c ../../.lint/complexity.json && vp test run --coverage"
   }
 }

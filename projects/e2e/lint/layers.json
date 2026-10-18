@@ -1,6 +1,0 @@
-{
-  "extends": ["./dependencies.json"],
-  "categories": {
-    "correctness": "off"
-  }
-}

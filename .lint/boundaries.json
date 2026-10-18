@@ -1,0 +1,196 @@
+{
+  "$schema": "../node_modules/oxlint/configuration_schema.json",
+  "categories": {
+    "correctness": "off"
+  },
+  "overrides": [
+    {
+      "files": ["**/src/app.*.ts"],
+      "rules": {
+        "eslint/no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": ["./features/**", "!./features/features.manifest.ts"],
+                "message": "main uses the features only through the manifest."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "files": ["**/src/core/**/*.ts"],
+      "rules": {
+        "eslint/no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": ["**/features/**", "**/app.{main,compose}.ts"],
+                "message": "core never uses a feature, the manifest or main. The composition connects them."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "files": ["**/src/features/features.manifest.ts"],
+      "rules": {
+        "eslint/no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": [
+                  "../core/**",
+                  "../app.*.ts",
+                  "./*/*.{api,service,policy,store,repository,client}.ts"
+                ],
+                "message": "The manifest uses only the presentation (the registration) of each feature."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "files": ["**/src/features/*/*.ts"],
+      "rules": {
+        "eslint/no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": ["../../core/**", "../../app.*.ts", "../features.manifest.ts"],
+                "message": "A feature never uses core, main or the manifest. The composition gives it the services of core through the contracts of shared."
+              },
+              {
+                "group": ["../*/*.ts", "!../*/*.api.ts"],
+                "message": "A feature uses a different feature only through its facade ({feature}.api.ts)."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "files": ["**/src/features/*/*.{controller,request,command,page,component,card}.ts"],
+      "rules": {
+        "eslint/no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": ["../../core/**", "../../app.*.ts", "../features.manifest.ts"],
+                "message": "A feature never uses core, main or the manifest. The composition gives it the services of core through the contracts of shared."
+              },
+              {
+                "group": ["../*/*.ts", "!../*/*.api.ts"],
+                "message": "A feature uses a different feature only through its facade ({feature}.api.ts)."
+              },
+              {
+                "group": ["./*.{repository,client}.ts"],
+                "message": "presentation never uses data: only the registration (routes) creates it for logic. The direction is presentation → logic → data."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "files": ["**/src/features/*/*.api.ts"],
+      "rules": {
+        "eslint/no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": ["../../core/**", "../../app.*.ts", "../features.manifest.ts"],
+                "message": "A feature never uses core, main or the manifest. The composition gives it the services of core through the contracts of shared."
+              },
+              {
+                "group": ["../*/*.ts", "!../*/*.api.ts"],
+                "message": "A feature uses a different feature only through its facade ({feature}.api.ts)."
+              },
+              {
+                "group": [
+                  "./*.{routes,controller,request,command,page,component,card,repository,client}.ts"
+                ],
+                "message": "The facade never uses presentation or data. The direction is facade → logic → data."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "files": ["**/src/features/*/*.{service,policy,store}.ts"],
+      "rules": {
+        "eslint/no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": ["../../core/**", "../../app.*.ts", "../features.manifest.ts"],
+                "message": "A feature never uses core, main or the manifest. The composition gives it the services of core through the contracts of shared."
+              },
+              {
+                "group": ["../*/*.ts", "!../*/*.api.ts"],
+                "message": "A feature uses a different feature only through its facade ({feature}.api.ts)."
+              },
+              {
+                "group": ["./*.{routes,controller,request,command,page,component,card,api}.ts"],
+                "message": "logic never uses presentation or the facade. The direction is presentation → logic → data."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "files": ["**/src/features/*/*.{repository,client}.ts"],
+      "rules": {
+        "eslint/no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": ["../../core/**", "../../app.*.ts", "../features.manifest.ts"],
+                "message": "A feature never uses core, main or the manifest. The composition gives it the services of core through the contracts of shared."
+              },
+              {
+                "group": ["../*/*.ts", "!../*/*.api.ts"],
+                "message": "A feature uses a different feature only through its facade ({feature}.api.ts)."
+              },
+              {
+                "group": [
+                  "./*.{routes,controller,request,command,page,component,card,service,policy,store,api}.ts"
+                ],
+                "message": "data never uses presentation, logic or the facade. The direction is presentation → logic → data."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "files": ["**/src/shared/*.ts", "**/src/shared/*/*.ts"],
+      "rules": {
+        "eslint/no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": ["{..,../..}/{core,features}/**", "{..,../..}/app.*.ts"],
+                "message": "shared uses no part of the application: no core, features or main."
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}
