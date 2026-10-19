@@ -1,11 +1,18 @@
 {
   "$schema": "../node_modules/oxlint/configuration_schema.json",
-  "plugins": ["import"],
+  "plugins": ["import", "vitest"],
   "categories": {
     "correctness": "off"
   },
   "rules": {
-    "import/no-relative-parent-imports": "error"
+    "import/no-relative-parent-imports": "error",
+    "vitest/no-restricted-vi-methods": [
+      "error",
+      {
+        "mock": "A test never replaces a module: it gets the disk, the database, the network or the process as an argument, with a fake (vi.fn).",
+        "doMock": "A test never replaces a module: it gets the disk, the database, the network or the process as an argument, with a fake (vi.fn)."
+      }
+    ]
   },
   "overrides": [
     {

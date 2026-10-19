@@ -1,7 +1,14 @@
 import { expect, test } from "vite-plus/test";
 import { applicationHelp, commandHelp, settingOptions, shellOptions } from "./app.help.ts";
-import { identity } from "#shared/identity.ts";
 import type { CommandRegistration } from "#shared/output/command.type.ts";
+
+const identity = {
+  name: "System",
+  description: "A system",
+  author: "Author",
+  website: "https://example.com",
+  version: "1.0.0",
+};
 
 const command: CommandRegistration = {
   name: "sample",
@@ -13,7 +20,7 @@ const command: CommandRegistration = {
 };
 
 test("application help lists registered commands and shell usage", () => {
-  const help = applicationHelp([command]);
+  const help = applicationHelp([command], identity);
   expect(help.data).toEqual({
     name: identity.name,
     commands: [{ name: "sample", summary: "Sample command", usage: "sample list" }],

@@ -1,4 +1,4 @@
-import { identity } from "#shared/identity.ts";
+import type { Identity } from "#shared/identity.value.ts";
 import type { CommandRegistration, CommandOption } from "#shared/output/command.type.ts";
 import type { SettingDefinition } from "#shared/settings/settings.type.ts";
 export const shellOptions: readonly CommandOption[] = [
@@ -14,7 +14,7 @@ export function settingOptions(definitions: readonly SettingDefinition[]): Comma
     default: fallback,
   }));
 }
-export function applicationHelp(commands: readonly CommandRegistration[]) {
+export function applicationHelp(commands: readonly CommandRegistration[], identity: Identity) {
   const data = {
     name: identity.name,
     commands: commands.map(({ name, summary, usage }) => ({ name, summary, usage })),

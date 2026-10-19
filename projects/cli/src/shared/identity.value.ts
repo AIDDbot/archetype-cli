@@ -22,6 +22,8 @@ function authorName(author: PackageIdentity["author"]): string {
   return isName ? author : author.name;
 }
 
+export type Identity = ReturnType<typeof createIdentity>;
+
 export function createIdentity(metadata: PackageIdentity) {
   const hasAuthor = metadata.author !== undefined;
   return {

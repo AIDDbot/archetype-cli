@@ -1,6 +1,6 @@
 {
   "$schema": "../node_modules/oxlint/configuration_schema.json",
-  "plugins": ["import"],
+  "plugins": ["import", "vitest"],
   "categories": {
     "correctness": "off"
   },
@@ -15,6 +15,13 @@
             "message": "The e2e is a black box: it starts each project with its start command and never imports its code."
           }
         ]
+      }
+    ],
+    "vitest/no-restricted-vi-methods": [
+      "error",
+      {
+        "mock": "A test never replaces a module: it gets the disk, the database, the network or the process as an argument, with a fake (vi.fn).",
+        "doMock": "A test never replaces a module: it gets the disk, the database, the network or the process as an argument, with a fake (vi.fn)."
       }
     ]
   }

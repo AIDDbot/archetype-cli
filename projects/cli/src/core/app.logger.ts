@@ -1,7 +1,7 @@
-import { appendFile, mkdir } from "node:fs/promises";
 import { join } from "node:path";
 import { formatDate, formatTime } from "#shared/dates.format.ts";
 import type { Logger, LogLevel } from "#shared/output/logger.type.ts";
+import { logFiles } from "./files.adapter.ts";
 const levels = ["debug", "info", "warn", "error"];
 export interface LogOutput {
   mkdir(path: string, options: { recursive: true }): Promise<unknown>;
@@ -13,7 +13,7 @@ export function formatLog(input: { date: Date; level: LogLevel; message: string 
 }
 export function createLogger(
   options: { directory?: string | undefined; level: string; quietConsole?: boolean },
-  output: LogOutput = { mkdir, appendFile, error: console.error },
+  output: LogOutput = { ...logFiles, error: console.error },
 ): Logger {
   let queue = Promise.resolve();
   return {

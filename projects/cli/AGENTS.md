@@ -49,7 +49,7 @@ The Common stack of the root `AGENTS.md`. Node.js runs `src/app.main.ts` with no
 - `logic`: rules and decisions. It does not know how data is stored.
 - `data`: all that the project reads or writes outside itself (database, remote API, files).
 - A feature that the manifest loads on demand has no other import. Tests start the application through the composition, without a port.
-- Unit tests prove `logic`, at least one for each business rule, with a fake `data`. They also prove `shared` and `core`. They are fast and independent, and touch no disk, database, network or process: the acceptance tests prove `data`. Each one sits beside its module, with the same name. The pre-commit hook runs the ones that a commit affects. A business rule without a unit test is debt.
+- Unit tests prove `logic`, at least one for each business rule, with a fake `data`. They also prove `shared` and `core`. They are fast and independent, and touch no disk, database, network or process: they get each one as an argument, with a fake, never by replacing a module (`vi.mock`); the acceptance tests prove `data` and the adapters of `core` (`src/core/files.adapter.ts`, out of the coverage). Each one sits beside its module, with the same name. The pre-commit hook runs the ones that a commit affects. A business rule without a unit test is debt.
 
 ## 5 · Folder structure
 

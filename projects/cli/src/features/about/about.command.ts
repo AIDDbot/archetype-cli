@@ -1,4 +1,4 @@
-import { identity } from "#shared/identity.ts";
+import type { Identity } from "#shared/identity.value.ts";
 import { ExpectedError } from "#shared/errors/expected.error.ts";
 import type { CommandRegistration } from "#shared/output/command.type.ts";
 
@@ -15,7 +15,7 @@ const projects = [
   { name: "e2e", type: "e2e", technologies },
 ] as const;
 
-export function registerAbout(): CommandRegistration {
+export function registerAbout({ identity }: { identity: Identity }): CommandRegistration {
   return {
     name: "about",
     summary: "Show application identity and technology",

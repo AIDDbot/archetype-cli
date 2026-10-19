@@ -8,9 +8,10 @@ import { runApplication } from "./core/app.lifecycle.ts";
 import { applicationHelp, commandHelp, settingOptions, shellOptions } from "./core/app.help.ts";
 import { ExpectedError } from "./shared/errors/expected.error.ts";
 import type { Logger } from "./shared/output/logger.type.ts";
-import { identity } from "./shared/identity.ts";
+import { loadIdentity } from "./core/app.identity.ts";
 import { renderOutput } from "./core/app.output.ts";
-const commands = features.map((register) => register());
+const identity = loadIdentity(fileURLToPath(new URL(".", import.meta.url)));
+const commands = features.map((register) => register({ identity }));
 const options = settingOptions(definitions);
 function parse(args: string[]) {
   return parseShellArguments(args, {
@@ -34,7 +35,7 @@ async function run(
   if (hasExtraHelpArguments) throw new ExpectedError("usage", "Use help [command]");
   const requested = isHelp ? target : name;
   const hasRequest = requested !== undefined;
-  if (!hasRequest) return applicationHelp(commands);
+  if (!hasRequest) return applicationHelp(commands, identity);
   const command = findCommand(requested);
   const wantsHelp = isHelp || parsed.options.help === true;
   if (wantsHelp) return commandHelp(command, options);
@@ -90,5 +91,5 @@ function report(
     console.error(`Usage: ${command.usage}`);
     return;
   }
-  console.error(applicationHelp(commands).text);
+  console.error(applicationHelp(commands, identity).text);
 }
