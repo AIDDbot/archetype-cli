@@ -1,4 +1,4 @@
-import type { Settings } from "../settings/settings.type.ts";
+import type { Settings } from "#shared/settings/settings.type.ts";
 import type { View } from "./view.type.ts";
 export interface CommandOption {
   name: string;

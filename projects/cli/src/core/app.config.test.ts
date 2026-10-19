@@ -1,7 +1,7 @@
 import { resolve } from "node:path";
 import { expect, test, vi } from "vite-plus/test";
 import { createSettings } from "./app.config.ts";
-import type { ConfigurationStorage } from "../shared/settings/configuration.type.ts";
+import type { ConfigurationStorage } from "#shared/settings/configuration.type.ts";
 
 function fakeStorage() {
   return {

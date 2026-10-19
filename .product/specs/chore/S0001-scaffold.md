@@ -65,7 +65,7 @@ Each project of `.product/system.md` must exist, with the shape of the Blueprint
 - The ignore file never hides source. Anchor runtime data patterns to the project root.
 - Each tooling slot of that `AGENTS.md` operates. If a mandatory slot is missing (`test`, `start`, `layers`, `crap`), install the usual tool of the stack.
 - The pre-commit hook of the root runs the unit tests of the project that a commit affects.
-- For JS / TS, the boundary rules go into `.lint/boundaries.json` (`boundaries.e2e.json` for `e2e`), from `.product/blueprint/lint/`. The scripts of each project point to `../../.lint/`: `layers` runs the boundaries, `crap` runs the complexity and then the coverage. The scripts of a project are its slots, and no more.
+- For JS / TS, the boundary rules go into `.lint/boundaries.json` (`boundaries.e2e.json` for `e2e`), from `.product/blueprint/lint/`. Each project has a local `boundaries.json` and `complexity.json` that extend them, and its scripts read the local files: `layers` runs the boundaries, `crap` runs the complexity and then the coverage. The `imports` of its `package.json` give `#shared` and `#api`: no import from a parent folder. The scripts of a project are its slots, and no more.
 - Register the type and the slots with `node .agents/aidd/aidd.mjs config set projects.{project} '{"type":"{type}",...}'`.
 - Prove the debt checks: add an import that the architecture forbids, make sure that `layers` fails, then remove the import. Do the same with a function over the limits and `crap`.
 - Prove the hook: stage a unit test that fails, make sure that the commit fails, then repair it.

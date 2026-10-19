@@ -29,7 +29,7 @@ The repository is an AIDDbot system: `.product/PRD.md` lists the shipped foundat
 - **Language**: TypeScript 7, on Node.js with no build and no framework. Use erasable syntax.
 - **Dependencies**: the Node.js standard library and Vite+. The list is closed: no other dependency unless a spec names it.
 - **Pre-commit hook**: `vp staged` formats, lints and type-checks the staged files with safe fixes, and runs the unit tests that they affect.
-- **Debt checks**: in `.lint/` at the root. The scripts `layers` and `crap` of each project point there.
+- **Debt checks**: in `.lint/` at the root. The `boundaries.json` and `complexity.json` of each project extend them, and its scripts `layers` and `crap` read them.
 
 ## Blueprint
 

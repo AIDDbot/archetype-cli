@@ -1,6 +1,6 @@
-import { identity } from "../shared/identity.ts";
-import type { CommandRegistration, CommandOption } from "../shared/output/command.type.ts";
-import type { SettingDefinition } from "../shared/settings/settings.type.ts";
+import { identity } from "#shared/identity.ts";
+import type { CommandRegistration, CommandOption } from "#shared/output/command.type.ts";
+import type { SettingDefinition } from "#shared/settings/settings.type.ts";
 export const shellOptions: readonly CommandOption[] = [
   { name: "help", summary: "Show help" },
   { name: "json", summary: "Write one JSON object" },

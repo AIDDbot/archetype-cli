@@ -1,8 +1,8 @@
 import { readFile, writeFile } from "node:fs/promises";
-import { isRecord } from "../shared/checks.guard.ts";
-import { attempt } from "../shared/errors/expected.error.ts";
-import type { TextFiles } from "../shared/files.type.ts";
-import type { ConfigurationStorage } from "../shared/settings/configuration.type.ts";
+import { isRecord } from "#shared/checks.guard.ts";
+import { attempt } from "#shared/errors/expected.error.ts";
+import type { TextFiles } from "#shared/files.type.ts";
+import type { ConfigurationStorage } from "#shared/settings/configuration.type.ts";
 
 export function createConfigurationStorage(files?: TextFiles): ConfigurationStorage {
   return {

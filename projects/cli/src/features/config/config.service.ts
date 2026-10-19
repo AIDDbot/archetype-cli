@@ -1,5 +1,5 @@
-import { ExpectedError } from "../../shared/errors/expected.error.ts";
-import type { Settings } from "../../shared/settings/settings.type.ts";
+import { ExpectedError } from "#shared/errors/expected.error.ts";
+import type { Settings } from "#shared/settings/settings.type.ts";
 export function createConfigService(settings: Settings) {
   return {
     get(name?: string) {

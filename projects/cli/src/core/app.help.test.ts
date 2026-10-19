@@ -1,7 +1,7 @@
 import { expect, test } from "vite-plus/test";
 import { applicationHelp, commandHelp, settingOptions, shellOptions } from "./app.help.ts";
-import { identity } from "../shared/identity.ts";
-import type { CommandRegistration } from "../shared/output/command.type.ts";
+import { identity } from "#shared/identity.ts";
+import type { CommandRegistration } from "#shared/output/command.type.ts";
 
 const command: CommandRegistration = {
   name: "sample",

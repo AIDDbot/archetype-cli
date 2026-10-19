@@ -1,10 +1,10 @@
 import { expect, test } from "vite-plus/test";
 import { readFile } from "node:fs/promises";
 import { resolve } from "node:path";
-import { cliDirectory } from "../../shared/projects/settings.ts";
-import { createCliSetup } from "../../shared/projects/setup.ts";
-import { readRecord } from "../../shared/record.read.ts";
-import { technologies } from "../../shared/test-data/technologies.ts";
+import { cliDirectory } from "#shared/projects/settings.ts";
+import { createCliSetup } from "#shared/projects/setup.ts";
+import { readRecord } from "#shared/record.read.ts";
+import { technologies } from "#shared/test-data/technologies.ts";
 
 const setup = createCliSetup();
 

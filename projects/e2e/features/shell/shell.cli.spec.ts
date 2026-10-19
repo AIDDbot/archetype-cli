@@ -1,9 +1,9 @@
 import { expect, test } from "vite-plus/test";
 import { readFile, writeFile } from "node:fs/promises";
 import { resolve } from "node:path";
-import { createCliSetup } from "../../shared/projects/setup.ts";
-import { runJson } from "../../shared/projects/json.ts";
-import { cliDirectory } from "../../shared/projects/settings.ts";
+import { createCliSetup } from "#shared/projects/setup.ts";
+import { runJson } from "#shared/projects/json.ts";
+import { cliDirectory } from "#shared/projects/settings.ts";
 const identity = JSON.parse(await readFile(resolve(cliDirectory, "../../package.json"), "utf8"));
 const setup = createCliSetup();
 test("@S0004-R01 root help forms show identity and commands", async () => {

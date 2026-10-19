@@ -1,5 +1,5 @@
-import { ExpectedError } from "../shared/errors/expected.error.ts";
-import type { Logger } from "../shared/output/logger.type.ts";
+import { ExpectedError } from "#shared/errors/expected.error.ts";
+import type { Logger } from "#shared/output/logger.type.ts";
 interface Invocation {
   command: string;
   logger: Logger;

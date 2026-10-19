@@ -1,7 +1,7 @@
-import { ExpectedError } from "../shared/errors/expected.error.ts";
+import { ExpectedError } from "#shared/errors/expected.error.ts";
 import { parseArgs } from "node:util";
-import type { SettingDefinition } from "../shared/settings/settings.type.ts";
-import type { CommandOption } from "../shared/output/command.type.ts";
+import type { SettingDefinition } from "#shared/settings/settings.type.ts";
+import type { CommandOption } from "#shared/output/command.type.ts";
 export function parseShellArguments(
   args: string[],
   input: { definitions: readonly SettingDefinition[]; options: readonly CommandOption[] },

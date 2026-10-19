@@ -1,8 +1,8 @@
 import { expect, test } from "vite-plus/test";
 import { readFile, writeFile, mkdir } from "node:fs/promises";
 import { join } from "node:path";
-import { createCliSetup } from "../../shared/projects/setup.ts";
-import { readTable } from "../../shared/table.read.ts";
+import { createCliSetup } from "#shared/projects/setup.ts";
+import { readTable } from "#shared/table.read.ts";
 const setup = createCliSetup();
 
 test("@S0006-R02 @S0004-R07 config get rejects extra arguments and unknown options", async () => {

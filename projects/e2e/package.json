@@ -4,11 +4,14 @@
   "private": true,
   "description": "",
   "type": "module",
+  "imports": {
+    "#shared/*": "./shared/*"
+  },
   "scripts": {
     "start": "vp test --passWithNoTests",
     "test": "vp test run --passWithNoTests",
     "test:spec": "vp test run --passWithNoTests -t",
-    "layers": "vp lint -c ../../.lint/boundaries.e2e.json",
-    "crap": "vp lint -c ../../.lint/complexity.e2e.json"
+    "layers": "vp lint -c boundaries.json",
+    "crap": "vp lint -c complexity.json"
   }
 }

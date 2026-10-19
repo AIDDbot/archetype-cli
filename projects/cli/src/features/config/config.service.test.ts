@@ -1,6 +1,6 @@
 import { expect, test, vi } from "vite-plus/test";
 import { createConfigService } from "./config.service.ts";
-import type { Settings } from "../../shared/settings/settings.type.ts";
+import type { Settings } from "#shared/settings/settings.type.ts";
 function settings(set = vi.fn<Settings["set"]>(async () => {})): Settings {
   return {
     list: () => [{ name: "LOG_LEVEL", value: "debug", source: "argument" }],

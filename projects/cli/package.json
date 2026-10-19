@@ -7,10 +7,14 @@
     "archetype-cli": "src/app.main.ts"
   },
   "type": "module",
+  "imports": {
+    "#shared/*": "./src/shared/*",
+    "#api/*": "./src/features/*/*.api.ts"
+  },
   "scripts": {
     "start": "node src/app.main.ts",
     "test": "vp test run",
-    "layers": "vp lint -c ../../.lint/boundaries.json",
-    "crap": "vp lint -c ../../.lint/complexity.json && vp test run --coverage"
+    "layers": "vp lint -c boundaries.json",
+    "crap": "vp lint -c complexity.json && vp test run --coverage"
   }
 }

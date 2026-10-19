@@ -1,72 +1,21 @@
 {
   "$schema": "../node_modules/oxlint/configuration_schema.json",
+  "plugins": ["import"],
   "categories": {
     "correctness": "off"
   },
-  "overrides": [
-    {
-      "files": ["**/core/*.ts"],
-      "rules": {
-        "eslint/no-restricted-imports": [
-          "error",
+  "rules": {
+    "import/no-relative-parent-imports": "error",
+    "eslint/no-restricted-imports": [
+      "error",
+      {
+        "patterns": [
           {
-            "patterns": [
-              {
-                "group": ["../features/**"],
-                "message": "core never uses a test. It can use shared."
-              },
-              {
-                "group": ["**/src/**"],
-                "message": "The e2e is a black box: it starts each project with its start command and never imports its code."
-              }
-            ]
+            "group": ["**/src/**"],
+            "message": "The e2e is a black box: it starts each project with its start command and never imports its code."
           }
         ]
       }
-    },
-    {
-      "files": ["**/features/*/*.ts"],
-      "rules": {
-        "eslint/no-restricted-imports": [
-          "error",
-          {
-            "patterns": [
-              {
-                "group": ["../../core/**"],
-                "message": "Tests never use core. They get the settings and the client of each project from shared/projects/."
-              },
-              {
-                "group": ["../*/*"],
-                "message": "A test never uses a different feature. Move what both use to shared."
-              },
-              {
-                "group": ["**/src/**"],
-                "message": "The e2e is a black box: it starts each project with its start command and never imports its code."
-              }
-            ]
-          }
-        ]
-      }
-    },
-    {
-      "files": ["**/shared/*.ts", "**/shared/*/*.ts"],
-      "rules": {
-        "eslint/no-restricted-imports": [
-          "error",
-          {
-            "patterns": [
-              {
-                "group": ["**/core/**", "**/features/**"],
-                "message": "shared uses no core and no test."
-              },
-              {
-                "group": ["**/src/**"],
-                "message": "The e2e is a black box: it starts each project with its start command and never imports its code."
-              }
-            ]
-          }
-        ]
-      }
-    }
-  ]
+    ]
+  }
 }

@@ -1,8 +1,8 @@
 import { afterEach, expect, test } from "vite-plus/test";
 import { readFile, readdir } from "node:fs/promises";
 import { join } from "node:path";
-import { createCli } from "../../shared/projects/cli.ts";
-import { expectFailure } from "../../shared/projects/failure.ts";
+import { createCli } from "#shared/projects/cli.ts";
+import { expectFailure } from "#shared/projects/failure.ts";
 const helpers: Awaited<ReturnType<typeof createCli>>[] = [];
 async function setup() {
   const cli = await createCli();

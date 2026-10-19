@@ -1,9 +1,9 @@
 import { definitions, selectSetting, resolveSetting } from "./app.settings.ts";
 import { createConfigurationStorage } from "./app.storage.ts";
-import type { ConfigurationStorage } from "../shared/settings/configuration.type.ts";
-import { requireByName } from "../shared/checks.guard.ts";
+import type { ConfigurationStorage } from "#shared/settings/configuration.type.ts";
+import { requireByName } from "#shared/checks.guard.ts";
 import type { SettingSources } from "./app.settings.ts";
-import type { Settings } from "../shared/settings/settings.type.ts";
+import type { Settings } from "#shared/settings/settings.type.ts";
 export async function createSettings(
   input: {
     sources: SettingSources;

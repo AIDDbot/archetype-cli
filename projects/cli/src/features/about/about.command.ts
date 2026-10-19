@@ -1,6 +1,6 @@
-import { identity } from "../../shared/identity.ts";
-import { ExpectedError } from "../../shared/errors/expected.error.ts";
-import type { CommandRegistration } from "../../shared/output/command.type.ts";
+import { identity } from "#shared/identity.ts";
+import { ExpectedError } from "#shared/errors/expected.error.ts";
+import type { CommandRegistration } from "#shared/output/command.type.ts";
 
 const technologies = [
   "TypeScript 7",

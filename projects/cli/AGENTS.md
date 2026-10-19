@@ -61,6 +61,8 @@ src/
 └── shared/              # primitives at the root; errors/, output/, settings/
 ```
 
+Imports out of a folder: `#shared/{path}.ts` and `#api/{feature}` (the facade), from the `imports` of `package.json`; never `../`.
+
 ### Shared primitives
 
 | Primitive | Contract | Path |

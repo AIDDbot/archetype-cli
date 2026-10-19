@@ -1,6 +1,6 @@
 import { expect, test } from "vite-plus/test";
 import { renderOutput } from "./app.output.ts";
-import type { CommandResult } from "../shared/output/command.type.ts";
+import type { CommandResult } from "#shared/output/command.type.ts";
 
 test("core renders typed views and preserves the declared machine response", () => {
   const result: CommandResult = {

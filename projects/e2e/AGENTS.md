@@ -45,6 +45,8 @@ features/      # {feature}/*.cli.spec.ts
 shared/        # projects/, test-data/, readers
 ```
 
+Imports out of a folder: `#shared/{path}.ts`, from the `imports` of `package.json`; never `../`.
+
 ### Shared primitives
 
 | Primitive | Contract | Path |
