@@ -2,6 +2,11 @@ import { ExpectedError } from "#shared/errors/expected.error.ts";
 import { parseArgs } from "node:util";
 import type { SettingDefinition } from "#shared/settings/settings.type.ts";
 import type { CommandOption } from "#shared/output/command.type.ts";
+function optionType(placeholder: string | undefined) {
+  const isFlag = placeholder === undefined;
+  return isFlag ? ("boolean" as const) : ("string" as const);
+}
+
 export function parseShellArguments(
   args: string[],
   input: { definitions: readonly SettingDefinition[]; options: readonly CommandOption[] },
@@ -9,7 +14,7 @@ export function parseShellArguments(
   const settings = input.definitions.map(({ option }) => [option, { type: "string" as const }]);
   const declared = input.options.map(({ name, placeholder }) => [
     name,
-    { type: placeholder === undefined ? ("boolean" as const) : ("string" as const) },
+    { type: optionType(placeholder) },
   ]);
   const options: Record<string, { type: "string" | "boolean" }> = Object.fromEntries([
     ...settings,
@@ -25,9 +30,10 @@ export function parseShellArguments(
     const unknown = args.find(
       (arg) => arg.startsWith("--") && !((arg.slice(2).split("=")[0] ?? "") in options),
     );
+    const hasUnknown = unknown !== undefined;
     throw new ExpectedError(
       "usage",
-      unknown === undefined ? "Invalid command options" : `Unknown option ${unknown.split("=")[0]}`,
+      hasUnknown ? `Unknown option ${unknown.split("=")[0]}` : "Invalid command options",
     );
   }
 }

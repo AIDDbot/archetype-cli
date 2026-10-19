@@ -8,7 +8,8 @@ function readWorkspace(directory: string): PackageIdentity | undefined {
   const path = join(directory, "package.json");
   if (!existsSync(path)) return undefined;
   const metadata: unknown = JSON.parse(readFileSync(path, "utf8"));
-  if (!isRecord(metadata) || metadata.workspaces === undefined) return undefined;
+  const isWorkspace = isRecord(metadata) && metadata.workspaces !== undefined;
+  if (!isWorkspace) return undefined;
   if (!isPackageIdentity(metadata)) throw new Error(`Invalid identity in ${path}`);
   return metadata;
 }

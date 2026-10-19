@@ -14,9 +14,11 @@ export function registerConfig(): CommandRegistration {
     async run(args, settings) {
       const service = createConfigService(settings);
       const [operation, name, value] = args;
-      if (operation === "get" && args.length <= 2) {
+      const isGet = operation === "get" && args.length <= 2;
+      if (isGet) {
         const data = service.get(name);
-        if (!("settings" in data)) return { data, text: data.value };
+        const isList = "settings" in data;
+        if (!isList) return { data, text: data.value };
         return {
           data,
           view: {
@@ -27,7 +29,9 @@ export function registerConfig(): CommandRegistration {
           },
         };
       }
-      if (operation === "set" && args.length === 3 && name !== undefined && value !== undefined) {
+      const isSet = operation === "set" && args.length === 3;
+      const hasValue = name !== undefined && value !== undefined;
+      if (isSet && hasValue) {
         await service.set(name, value);
         return { data: {}, text: "" };
       }

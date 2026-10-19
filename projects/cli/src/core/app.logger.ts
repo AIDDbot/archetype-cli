@@ -18,13 +18,15 @@ export function createLogger(
   let queue = Promise.resolve();
   return {
     log(level, message) {
-      if (levels.indexOf(level) < levels.indexOf(options.level)) return;
+      const isBelowLevel = levels.indexOf(level) < levels.indexOf(options.level);
+      if (isBelowLevel) return;
       const date = new Date();
       const line = formatLog({ date, level, message });
       const isVisible = level === "warn" || level === "error";
       if (isVisible && !options.quietConsole) output.error(line);
       const { directory } = options;
-      if (directory === undefined) return;
+      const hasDirectory = directory !== undefined;
+      if (!hasDirectory) return;
       const write = async () => {
         await output.mkdir(directory, { recursive: true });
         await output.appendFile(join(directory, `${formatDate(date)}.log`), `${line}\n`);

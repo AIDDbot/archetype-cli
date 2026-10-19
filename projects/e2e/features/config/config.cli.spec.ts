@@ -118,9 +118,11 @@ test("@S0002-R08 rejects invalid settings from every source", async () => {
     });
     expect(environmental.code).not.toBe(0);
     expect(environmental.output).toContain(name);
-    if (name === "CONFIG_FILE") continue;
+    const isConfigFile = name === "CONFIG_FILE";
+    if (isConfigFile) continue;
     await writeFile(cli.file, JSON.stringify({ [name]: value }));
-    const stored = await cli.run(["config", "get"], name === "LOG_DIR" ? copy : {});
+    const isLogDir = name === "LOG_DIR";
+    const stored = await cli.run(["config", "get"], isLogDir ? copy : {});
     expect(stored.code).not.toBe(0);
     expect(stored.output).toContain(name);
     await writeFile(cli.file, "{}");

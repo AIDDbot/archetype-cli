@@ -20,7 +20,8 @@ async function readConfiguration(
 ): Promise<Record<string, unknown>> {
   return attempt(async () => {
     const content = await readOptional(files, path);
-    if (content === undefined) return {};
+    const isMissing = content === undefined;
+    if (isMissing) return {};
     const value: unknown = JSON.parse(content);
     if (!isRecord(value)) throw new Error("Expected an object");
     return value;
@@ -30,7 +31,8 @@ async function readOptional(files: TextFiles | undefined, path: string) {
   try {
     return await (files ? files.read(path) : readFile(path, "utf8"));
   } catch (error) {
-    if (isRecord(error) && error.code === "ENOENT") return undefined;
+    const isMissing = isRecord(error) && error.code === "ENOENT";
+    if (isMissing) return undefined;
     throw error;
   }
 }

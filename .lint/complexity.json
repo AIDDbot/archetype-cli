@@ -1,5 +1,6 @@
 {
   "$schema": "../node_modules/oxlint/configuration_schema.json",
+  "jsPlugins": ["./conditions.mjs"],
   "categories": {
     "correctness": "off"
   },
@@ -34,6 +35,12 @@
         "max": 128,
         "skipBlankLines": true,
         "skipComments": true
+      }
+    ],
+    "conditions/named": [
+      "error",
+      {
+        "maxOperators": 1
       }
     ]
   },

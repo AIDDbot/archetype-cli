@@ -27,7 +27,8 @@ test.each(["result", undefined])(
     expect(
       await runApplication(async () => result, { command: "cli", logger, output, error }),
     ).toBe(0);
-    expect(output.mock.calls).toEqual(result === undefined ? [] : [[result]]);
+    const hasResult = result !== undefined;
+    expect(output.mock.calls).toEqual(hasResult ? [[result]] : []);
     expect(error).not.toHaveBeenCalled();
     expect(logger.log).toHaveBeenCalledWith(
       "info",

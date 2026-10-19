@@ -18,18 +18,26 @@ function parse(args: string[]) {
     options: [...shellOptions, ...commands.flatMap((command) => command.options)],
   });
 }
+function findCommand(requested: string) {
+  const command = commands.find((item) => item.name === requested);
+  const isKnown = command !== undefined;
+  if (!isKnown) throw new ExpectedError("usage", `Unknown command: ${requested}`);
+  return command;
+}
 async function run(
   parsed: ReturnType<typeof parse>,
   configure: (logging: LoggingSettings) => void,
 ) {
   const [name, target] = parsed.command;
-  const hasExtraHelpArguments = name === "help" && parsed.command.length > 2;
+  const isHelp = name === "help";
+  const hasExtraHelpArguments = isHelp && parsed.command.length > 2;
   if (hasExtraHelpArguments) throw new ExpectedError("usage", "Use help [command]");
-  const requested = name === "help" ? target : name;
-  if (requested === undefined) return applicationHelp(commands);
-  const command = commands.find((item) => item.name === requested);
-  if (command === undefined) throw new ExpectedError("usage", `Unknown command: ${requested}`);
-  if (name === "help" || parsed.options.help === true) return commandHelp(command, options);
+  const requested = isHelp ? target : name;
+  const hasRequest = requested !== undefined;
+  if (!hasRequest) return applicationHelp(commands);
+  const command = findCommand(requested);
+  const wantsHelp = isHelp || parsed.options.help === true;
+  if (wantsHelp) return commandHelp(command, options);
   const directory = fileURLToPath(new URL("../", import.meta.url));
   const sources = { argument: parsed.values, environment: process.env, file: {} };
   configure(selectLogging(sources, directory));
@@ -54,7 +62,8 @@ export async function startApp() {
   let parsed: ReturnType<typeof parse> | undefined;
   const action = async () => {
     parsed = parse(args);
-    if (parsed.options.version === true) return identity.version;
+    const wantsVersion = parsed.options.version === true;
+    if (wantsVersion) return identity.version;
     const result = await run(parsed, configure);
     return renderOutput(result, isJson);
   };
@@ -76,7 +85,8 @@ function report(
   console.error(message);
   const words = context.parsed?.command ?? context.args;
   const command = commands.find((item) => words.includes(item.name));
-  if (command !== undefined) {
+  const hasCommand = command !== undefined;
+  if (hasCommand) {
     console.error(`Usage: ${command.usage}`);
     return;
   }

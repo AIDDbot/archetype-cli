@@ -19,13 +19,7 @@ test("tables align each column for headers and values", () => {
     ],
   });
   const lines = text.split("\n");
-  expect(
-    lines.map((line) =>
-      line.indexOf("Value") >= 0
-        ? line.indexOf("Value")
-        : line.indexOf(line.includes("long value") ? "long value" : "x"),
-    ),
-  ).toEqual([14, 14, 14]);
+  expect(lines.map((line) => line.search(/Value|long value|\bx\b/))).toEqual([14, 14, 14]);
   expect(lines.map((line) => line.search(/Source|default|file/))).toEqual([26, 26, 26]);
 });
 

@@ -4,7 +4,8 @@ export function readRecord(text: string) {
     .split(/\r?\n/)
     .flatMap((line) => {
       const match = /^([^:]+):\s+(.*)$/.exec(line);
-      if (match === null) return [];
+      const isRecordLine = match !== null;
+      if (!isRecordLine) return [];
       return [{ label: match[1], value: match[2], column: line.length - (match[2]?.length ?? 0) }];
     });
 }

@@ -37,10 +37,11 @@ export function selectSetting(
 ): SelectedSetting {
   const origins = ["argument", "environment", "file"] as const;
   for (const source of origins) {
-    if (definition.name === "CONFIG_FILE" && source === "file") continue;
+    const isSelfReference = definition.name === "CONFIG_FILE" && source === "file";
+    if (isSelfReference) continue;
     const value = sources[source][definition.name];
-    if (value !== undefined)
-      return { name: definition.name, value: parseSelected(definition, value), source };
+    const isSet = value !== undefined;
+    if (isSet) return { name: definition.name, value: parseSelected(definition, value), source };
   }
   return { name: definition.name, value: definition.fallback, source: "default" };
 }
@@ -61,7 +62,8 @@ export function selectLogging(sources: SettingSources, directory: string): Loggi
   return { directory: valid(folder), level: valid(level) ?? level.fallback };
 }
 export function resolveSetting(setting: SelectedSetting, directory: string): SelectedSetting {
-  if (setting.name === "LOG_LEVEL") return setting;
+  const isLevel = setting.name === "LOG_LEVEL";
+  if (isLevel) return setting;
   return { ...setting, value: resolve(directory, setting.value) };
 }
 

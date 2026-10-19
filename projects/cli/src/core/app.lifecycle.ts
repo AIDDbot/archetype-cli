@@ -1,5 +1,5 @@
 import { ExpectedError } from "#shared/errors/expected.error.ts";
-import type { Logger } from "#shared/output/logger.type.ts";
+import type { Logger, LogLevel } from "#shared/output/logger.type.ts";
 interface Invocation {
   command: string;
   logger: Logger;
@@ -15,21 +15,33 @@ export async function runApplication(
   let code = 0;
   try {
     const output = await action();
-    if (output !== undefined) invocation.output(output);
+    const hasOutput = output !== undefined;
+    if (hasOutput) invocation.output(output);
   } catch (error) {
-    code = error instanceof ExpectedError ? exitCodes[error.kind] : 1;
-    const message = error instanceof ExpectedError ? error.message : "Unexpected failure";
-    invocation.error(`error: ${message}`);
-    if (!(error instanceof ExpectedError))
-      invocation.logger.log("error", `Unexpected failure cause: ${describeCause(error)}`);
+    code = reportFailure(error, invocation);
   }
-  const level = code === 0 ? "info" : code === 3 ? "error" : "warn";
   invocation.logger.log(
-    level,
+    levelOf(code),
     `${invocation.command} exit=${code} duration=${Math.round(performance.now() - started)}ms`,
   );
   await invocation.logger.stop();
   return code;
+}
+
+function reportFailure(error: unknown, invocation: Invocation) {
+  const isExpected = error instanceof ExpectedError;
+  const message = isExpected ? error.message : "Unexpected failure";
+  invocation.error(`error: ${message}`);
+  if (isExpected) return exitCodes[error.kind];
+  invocation.logger.log("error", `Unexpected failure cause: ${describeCause(error)}`);
+  return 1;
+}
+
+function levelOf(code: number): LogLevel {
+  const isSuccess = code === 0;
+  const isUnavailable = code === exitCodes.unavailable;
+  if (isSuccess) return "info";
+  return isUnavailable ? "error" : "warn";
 }
 
 function describeCause(error: unknown) {

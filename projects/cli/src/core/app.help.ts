@@ -22,13 +22,18 @@ export function applicationHelp(commands: readonly CommandRegistration[]) {
   const text = `${identity.name}\n${identity.description}\nUsage: ${identity.name} <command> [options]\n${data.commands.map((item) => `${item.name}  ${item.summary}`).join("\n")}\nhelp  Show help`;
   return { data, text };
 }
+function describeOption(option: CommandOption) {
+  const hasPlaceholder = option.placeholder !== undefined;
+  const hasDefault = option.default !== undefined;
+  const placeholder = hasPlaceholder ? ` <${option.placeholder}>` : "";
+  const fallback = hasDefault ? ` (default: ${option.default})` : "";
+  return `--${option.name}${placeholder}  ${option.summary}${fallback}`;
+}
+
 export function commandHelp(command: CommandRegistration, options: readonly CommandOption[]) {
   const allOptions = [...shellOptions, ...options, ...command.options];
   const operations = command.operations.map((item) => `${item.name}  ${item.summary}`);
-  const descriptions = allOptions.map(
-    (item) =>
-      `--${item.name}${item.placeholder === undefined ? "" : ` <${item.placeholder}>`}  ${item.summary}${item.default === undefined ? "" : ` (default: ${item.default})`}`,
-  );
+  const descriptions = allOptions.map(describeOption);
   return {
     data: {
       name: command.name,

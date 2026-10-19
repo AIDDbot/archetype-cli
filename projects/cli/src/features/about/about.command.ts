@@ -23,7 +23,8 @@ export function registerAbout(): CommandRegistration {
     operations: [],
     options: [],
     async run(args) {
-      if (args.length > 0) throw new ExpectedError("usage", "Use about [options]");
+      const hasArguments = args.length > 0;
+      if (hasArguments) throw new ExpectedError("usage", "Use about [options]");
       const { name, description, version, author, website: homepage } = identity;
       const data = { name, description, version, author, homepage, projects };
       const facts = [

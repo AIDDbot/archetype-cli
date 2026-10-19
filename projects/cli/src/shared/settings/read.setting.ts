@@ -9,7 +9,8 @@ export interface SettingRead<T> {
 export function createSettingReader(source: SettingSource) {
   return function readSetting<T>(setting: SettingRead<T>): T {
     const value = source.read(setting.name);
-    if (value === undefined) return setting.fallback;
+    const isMissing = value === undefined;
+    if (isMissing) return setting.fallback;
     return setting.parse(value);
   };
 }

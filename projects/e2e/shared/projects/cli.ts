@@ -3,6 +3,7 @@ import { cp, mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import { cliDirectory, cliStart } from "./settings.ts";
+const isWindows = process.platform === "win32";
 export async function createCli() {
   const directory = await mkdtemp(join(tmpdir(), "configuration-"));
   const file = join(directory, "config.json");
@@ -16,10 +17,14 @@ export async function createCli() {
     run: (args: string[], options: Invocation = {}) =>
       invoke(args, {
         ...options,
-        file: options.file === undefined ? file : options.file,
-        logs: options.logs === undefined ? logs : options.logs,
+        file: orDefault(options.file, file),
+        logs: orDefault(options.logs, logs),
       }),
   };
+}
+function orDefault<T>(value: T | undefined, fallback: T): T {
+  const isMissing = value === undefined;
+  return isMissing ? fallback : value;
 }
 interface Invocation {
   environment?: Record<string, string>;
@@ -39,20 +44,24 @@ async function copyProject(directory: string) {
 function environmentOf(options: Invocation) {
   const environment: NodeJS.ProcessEnv = { ...process.env, npm_config_loglevel: "silent" };
   for (const name of ["CONFIG_FILE", "LOG_DIR", "LOG_LEVEL"]) delete environment[name];
-  if (options.logs != null) environment.LOG_DIR = options.logs;
+  const { logs } = options;
+  const hasLogs = logs != null;
+  if (hasLogs) environment.LOG_DIR = logs;
   return Object.assign(environment, options.environment);
 }
 function invoke(args: string[], options: Invocation) {
   const environment = environmentOf(options);
   const command = options.project ?? cliDirectory;
-  const argumentsList = options.file == null ? args : ["--config-file", options.file, ...args];
-  const executable = process.platform === "win32" ? "cmd.exe" : "/bin/sh";
+  const { file } = options;
+  const hasFile = file != null;
+  const argumentsList = hasFile ? ["--config-file", file, ...args] : args;
+  const executable = isWindows ? "cmd.exe" : "/bin/sh";
   const text = `${options.start ?? cliStart} ${argumentsList.map(quote).join(" ")}`;
-  const parameters = process.platform === "win32" ? ["/d", "/s", "/c", text] : ["-c", text];
+  const parameters = isWindows ? ["/d", "/s", "/c", text] : ["-c", text];
   return new Promise<{ code: number | null; output: string; stdout: string; stderr: string }>(
     (resolveResult, reject) => {
       const child = spawn(executable, parameters, {
-        windowsVerbatimArguments: process.platform === "win32",
+        windowsVerbatimArguments: isWindows,
         cwd: options.cwd ?? command,
         env: { ...environment, npm_config_local_prefix: command },
       });
@@ -73,6 +82,6 @@ function invoke(args: string[], options: Invocation) {
   );
 }
 function quote(value: string) {
-  if (process.platform === "win32") return `"${value.replaceAll('"', '""')}"`;
+  if (isWindows) return `"${value.replaceAll('"', '""')}"`;
   return `'${value.replaceAll("'", "'''")}'`;
 }

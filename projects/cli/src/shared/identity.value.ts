@@ -15,17 +15,20 @@ export function isPackageIdentity(value: unknown): value is PackageIdentity {
   return required.every(isText);
 }
 
+function authorName(author: PackageIdentity["author"]): string {
+  const hasAuthor = author !== undefined;
+  if (!hasAuthor) return "AIDDbot";
+  const isName = typeof author === "string";
+  return isName ? author : author.name;
+}
+
 export function createIdentity(metadata: PackageIdentity) {
+  const hasAuthor = metadata.author !== undefined;
   return {
     name: metadata.displayName ?? metadata.name,
     description: metadata.description,
-    author:
-      metadata.author === undefined
-        ? "AIDDbot"
-        : typeof metadata.author === "string"
-          ? metadata.author
-          : metadata.author.name,
-    website: metadata.author === undefined ? "https://aiddbot.com" : metadata.homepage,
+    author: authorName(metadata.author),
+    website: hasAuthor ? metadata.homepage : "https://aiddbot.com",
     version: metadata.version,
   };
 }

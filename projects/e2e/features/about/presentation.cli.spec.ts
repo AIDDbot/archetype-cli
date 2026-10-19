@@ -9,7 +9,8 @@ import { technologies } from "#shared/test-data/technologies.ts";
 const setup = createCliSetup();
 
 function readAuthorName(author: string | { name: string }): string {
-  return typeof author === "string" ? author : author.name;
+  const isName = typeof author === "string";
+  return isName ? author : author.name;
 }
 
 test("@S0006-R01 about labels and aligns identity and project facts", async () => {

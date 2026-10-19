@@ -7,7 +7,8 @@ import { cliDirectory } from "#shared/projects/settings.ts";
 import { technologies } from "#shared/test-data/technologies.ts";
 
 const identity = JSON.parse(await readFile(resolve(cliDirectory, "../../package.json"), "utf8"));
-const author = typeof identity.author === "string" ? identity.author : identity.author.name;
+const isAuthorName = typeof identity.author === "string";
+const author = isAuthorName ? identity.author : identity.author.name;
 const projects = [
   { name: "cli", type: "cli", technologies },
   { name: "e2e", type: "e2e", technologies },

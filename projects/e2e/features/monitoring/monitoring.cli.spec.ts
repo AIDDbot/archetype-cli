@@ -45,7 +45,8 @@ test("@S0003-R02 maps every exit code to its log level", async () => {
   for (const item of cases) {
     const result = await cli.run(item.args);
     expect(result.code).toBe(item.code);
-    if (item.code !== 0) expectFailure(result, item.code);
+    const isFailure = item.code !== 0;
+    if (isFailure) expectFailure(result, item.code);
     expect((await cli.logs()).trim().split("\n").at(-1)).toContain(
       ` cli ${item.level} config exit=${item.code} `,
     );
