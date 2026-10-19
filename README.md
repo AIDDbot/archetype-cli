@@ -22,7 +22,7 @@ npx degit AIDDbot/archetype-cli#v{version} my-system
 cd my-system && npm ci
 ```
 
-`npm ci` runs `prepare`, which installs the pre-commit hook. Then put the identity of your system in the root `package.json` (`displayName`, `description`, `author`, `homepage`, `license`, `version`). The cli reads it from there.
+`npm ci` runs `prepare`, which installs the pre-commit hook. Then put the identity of your system in the root `package.json` (`displayName`, `description`, `author`, `homepage`, `license`, `version`), and the same values in `projects/cli/package.json`: the cli imports its own `package.json`. The acceptance tests prove that both agree.
 
 ## Versions
 

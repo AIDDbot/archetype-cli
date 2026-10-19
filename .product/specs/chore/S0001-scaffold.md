@@ -31,7 +31,7 @@ Each project of `.product/system.md` must exist, with the shape of the Blueprint
 
 ### The system
 
-- The root `package.json` holds the identity of `.product/system.md`: `displayName`, `description`, `author`, `homepage` and `license`. `shell` and `about` read it; `aidd release` writes its `version`. Commit it as `chore: set the system identity`, before the first project.
+- The root `package.json` holds the identity of `.product/system.md`: `displayName`, `description`, `author`, `homepage` and `license`. The `package.json` of each project has a copy of it and of the `version`; `shell` and `about` import that copy. `aidd release` writes each `version`. Commit it as `chore: set the system identity`, before the first project.
 - The root of the system holds the tooling that all projects share: the pre-commit hook of the technology, the format and lint configuration, and the limits of complexity of the Blueprint. For JS / TS, it is the Vite+ workspace of `.product/blueprint/ecosystems.md`, with each project in `projects/` and the debt checks in `.lint/` at the root: `complexity.json` and `complexity.e2e.json` from `.product/blueprint/lint/`. The format leaves Markdown out. Commit it as `chore: set the system tooling`, before the first project; each project adds itself to it.
 
 ### Each project

@@ -20,7 +20,7 @@ The CLI must have one frame that each feature uses. Users need one way to find t
 
 ### Business rules
 
-- The identity of the application (name, description, author, website and version) must come from the root `package.json`, and each project must keep it in one location only.
+- The identity of the application (name, description, author, website and version) must come from the root `package.json`. Each project must keep its copy in one location only: its own `package.json`.
 - The shell must know no feature. Each feature must add its own commands through its registration.
 
 ### Out of context
@@ -33,7 +33,7 @@ The CLI must have one frame that each feature uses. Users need one way to find t
 
 ### All projects
 
-- One identity file in `shared` reads `displayName` (or `name`), `description`, `author`, `homepage` and `version` from the root `package.json`. Nothing copies them by hand.
+- One identity file in `shared` reads `displayName` (or `name`), `description`, `author`, `homepage` and `version` from the `package.json` of the project, which the composition imports as `#package`. Nothing copies them by hand: the scaffold writes the copy, and `aidd release` writes each version.
 
 ### cli
 

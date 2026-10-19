@@ -83,11 +83,10 @@ test("@S0005-R05 absent author uses the default author and website", async () =>
   const cli = await setup();
   const project = join(cli.directory, "projects", "cli");
   await cp(join(cliDirectory, "src"), join(project, "src"), { recursive: true });
-  await cp(join(cliDirectory, "package.json"), join(project, "package.json"));
-  const copy = { ...identity };
-  delete copy.author;
-  copy.homepage = "https://example.invalid";
-  await writeFile(join(cli.directory, "package.json"), JSON.stringify(copy));
+  const metadata = JSON.parse(await readFile(join(cliDirectory, "package.json"), "utf8"));
+  delete metadata.author;
+  metadata.homepage = "https://example.invalid";
+  await writeFile(join(project, "package.json"), JSON.stringify(metadata));
   const text = await cli.run(["about"], { project });
   expect(text.code).toBe(0);
   expect(text.stdout).toContain("AIDDbot");

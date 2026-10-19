@@ -32,7 +32,7 @@ Results use standard output. Errors and console records at `WARN` or `ERROR` use
 
 ## Shell
 
-The application reads its name, description, author, website, and version from the root `package.json`.
+The application reads its name, description, author, website, and version from its own `package.json`, a copy of the identity of the root `package.json`.
 
 Each feature registers its command name, summary, usage, operations, and options. Help lists the registrations in manifest order. The shell parses options once. It accepts help, JSON, version, and setting options before the command.
 

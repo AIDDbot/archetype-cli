@@ -18,7 +18,7 @@ An archetype of AIDDbot: a whole solution with a local command-line application 
 | cli | cli | Run one local command with its settings, output and log. | `projects/cli/AGENTS.md` |
 | e2e | e2e | Prove each requirement through the commands. It is the conformance suite of the archetype. | `projects/e2e/AGENTS.md` |
 
-The identity of a system (`displayName`, `description`, `author`, `homepage`, `license`, `version`) is in the root `package.json`.
+The identity of a system (`displayName`, `description`, `author`, `homepage`, `license`, `version`) is in the root `package.json`. The `package.json` of each project has a copy, which the project imports as `#package`; `aidd release` writes each version.
 
 ## Product
 

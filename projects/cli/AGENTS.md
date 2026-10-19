@@ -77,7 +77,7 @@ Imports out of a folder: `#shared/{path}.ts` and `#api/{feature}` (the facade), 
 | `CommandRegistration`, `CommandResult` | A command and its options as data; its result as data and a view or a text. | `src/shared/output/command.type.ts` |
 | `View` (`list`, `record`), `formatView` | A typed table or facts, and their aligned text. | `src/shared/output/view.type.ts`, `src/shared/output/view.format.ts` |
 | `formatValue`, `machineValue`, `emptyMessage` | A value for a person or for `--json`, and the text of an empty list. | `src/shared/output/values.format.ts`, `src/shared/output/states.format.ts` |
-| `parseIdentity` | The name, description, author, website and version of the root `package.json`, which `core/files.adapter.ts` reads and the composition passes. | `src/shared/identity.value.ts` |
+| `parseIdentity` | The name, description, author, website and version of the `package.json` of the project, which the composition imports as `#package` and passes. | `src/shared/identity.value.ts` |
 
 ## 6 · Coding rules
 
