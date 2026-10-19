@@ -1,6 +1,6 @@
 import { expect, test } from "vite-plus/test";
-import { parseShellArguments } from "./app.arguments.ts";
-import { definitions } from "./app.settings.ts";
+import { parseShellArguments } from "#core/settings/app.arguments.ts";
+import { definitions } from "#core/settings/app.settings.ts";
 import { shellOptions } from "./app.help.ts";
 test("shell parses global flags and settings before the command", () => {
   const parsed = parseShellArguments(["--json", "--help", "--log-level", "debug", "config"], {

@@ -1,6 +1,6 @@
 import { resolve } from "node:path";
-import { ExpectedError } from "#shared/errors/expected.error.ts";
-import { isOneOf, isText } from "#shared/checks.guard.ts";
+import { ExpectedError } from "#shared/expected.error.ts";
+import { isOneOf, isText } from "#shared/values/checks.guard.ts";
 import type { SettingDefinition, SelectedSetting } from "#shared/settings/settings.type.ts";
 function parsePath(name: string, value: unknown): string {
   if (!isText(value)) throw new ExpectedError("rule", `Invalid ${name}`);

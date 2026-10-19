@@ -1,8 +1,6 @@
 import { expect, test } from "vite-plus/test";
-import { readFile } from "node:fs/promises";
-import { resolve } from "node:path";
-import { cliDirectory } from "#shared/projects/settings.ts";
 import { createCliSetup } from "#shared/projects/setup.ts";
+import { identity } from "#shared/projects/identity.ts";
 import { readRecord } from "#shared/record.read.ts";
 import { technologies } from "#shared/test-data/technologies.ts";
 
@@ -15,7 +13,6 @@ function readAuthorName(author: string | { name: string }): string {
 
 test("@S0006-R01 about labels and aligns identity and project facts", async () => {
   const cli = await setup();
-  const identity = JSON.parse(await readFile(resolve(cliDirectory, "../../package.json"), "utf8"));
   const result = await cli.run(["about"]);
   expect(result.code).toBe(0);
   expect(result.stderr).toBe("");

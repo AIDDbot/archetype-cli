@@ -1,4 +1,4 @@
-import { ExpectedError } from "#shared/errors/expected.error.ts";
+import { ExpectedError } from "#shared/expected.error.ts";
 import type { CommandRegistration } from "#shared/output/command.type.ts";
 import { createConfigService } from "./config.service.ts";
 export function registerConfig(): CommandRegistration {

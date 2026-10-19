@@ -1,4 +1,4 @@
-import { formatDateTime } from "#shared/dates.format.ts";
+import { formatDateTime } from "#shared/values/dates.format.ts";
 import type { ViewValue } from "./view.type.ts";
 
 export function formatValue(value: ViewValue): string {

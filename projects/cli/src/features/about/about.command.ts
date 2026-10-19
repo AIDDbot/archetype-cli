@@ -1,5 +1,5 @@
 import type { Identity } from "#shared/identity.value.ts";
-import { ExpectedError } from "#shared/errors/expected.error.ts";
+import { ExpectedError } from "#shared/expected.error.ts";
 import type { CommandRegistration } from "#shared/output/command.type.ts";
 
 const technologies = [

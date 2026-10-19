@@ -1,5 +1,5 @@
 import { isText } from "./checks.guard.ts";
-import { ExpectedError } from "./errors/expected.error.ts";
+import { ExpectedError } from "#shared/expected.error.ts";
 export interface IntegerRange {
   field: string;
   min: number;

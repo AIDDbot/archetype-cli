@@ -46,7 +46,7 @@
   },
   "overrides": [
     {
-      "files": ["**/src/core/*.middleware.ts"],
+      "files": ["**/src/core/**/*.middleware.ts"],
       "rules": {
         "eslint/max-params": [
           "error",

@@ -1,4 +1,4 @@
-import { ExpectedError } from "./errors/expected.error.ts";
+import { ExpectedError } from "#shared/expected.error.ts";
 export function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
 }

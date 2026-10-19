@@ -38,8 +38,8 @@ The Common stack of the root `AGENTS.md`. Node.js runs `src/app.main.ts` with no
 
 | Container | Is | Never |
 | --- | --- | --- |
-| `core` | The platform that the framework or the entry calls one time at startup: server or shell, router, connections, error handler, global styles. | Business rules. Imports of a feature. |
-| `shared` | Generic elements with no domain, and the contracts of the services that features need (such as the logger, the HTTP client or the error type). Primitives at the root, other elements in folders by technical concern (`http`, `database`). | Domain words. Imports of `core` or of a feature. Folders `utils`, `helpers`, `common`, `misc`. |
+| `core` | The platform that the framework or the entry calls one time at startup: server or shell, router, connections, error handler, global styles. Files at the root, other elements in folders by technical concern (`logging`, `database`) when the folder is full. | Business rules. Imports of a feature. Folders `utils`, `helpers`, `common`, `misc`. |
+| `shared` | Generic elements with no domain, and the contracts of the services that features need (such as the logger, the HTTP client or the error type). At the root, only the expected error and the identity function; each other file in the folder of its concern, from the closed list of `shared` folders of the Blueprint (`values`, `settings`, `logging`, `output`). | Domain words. Imports of `core` or of a feature. Folders `utils`, `helpers`, `common`, `misc`. |
 | feature | One flat folder for one unit of business value. The role in each file name tells its layer. | Subfolders. Imports of `core`. Imports of a different feature, except its facade. |
 | composition | The entry. It starts `core`, registers each feature by name in one explicit list (the manifest), and gives the features the services of `core` through the contracts of `shared`. The only part that knows `core` and the features. | Automatic discovery: folder scans, global decorators, file-based routers. |
 
@@ -56,23 +56,23 @@ The Common stack of the root `AGENTS.md`. Node.js runs `src/app.main.ts` with no
 ```text
 src/
 ├── app.main.ts          # entry; app.compose.ts: composition
-├── core/app.*.ts        # platform, with its unit tests
+├── core/               # platform, with its unit tests; settings/
 ├── features/            # features.manifest.ts and one flat folder for each feature
-└── shared/              # primitives at the root; errors/, output/, settings/
+└── shared/              # expected.error.ts and identity at the root; values/, settings/, logging/, output/
 ```
 
-Imports out of a folder: `#shared/{path}.ts` and `#api/{feature}` (the facade), from the `imports` of `package.json`; never `../`.
+Imports out of a folder: `#shared/{path}.ts`, `#core/{path}.ts` (only `core` and the composition) and `#api/{feature}` (the facade), from the `imports` of `package.json`; never `../`.
 
 ### Shared primitives
 
 | Primitive | Contract | Path |
 | --- | --- | --- |
-| `isRecord`, `isText`, `isOneOf` | Type guards for an object, a text with a character that is not a space, and a closed list. | `src/shared/checks.guard.ts` |
-| `findByName`, `requireByName` | The item with a `name`; `require…` raises an expected error with the kind and the name. | `src/shared/checks.guard.ts` |
-| `requireText`, `parseInteger` | Checked text or integer, or an expected error with the field. | `src/shared/text.parse.ts`, `src/shared/numbers.parse.ts` |
-| `formatDate`, `formatTime`, `formatDateTime` | Local date, time of day and both, for logs and people. | `src/shared/dates.format.ts` |
-| `ExpectedError(kind, message)` | `rule` (exit 1), `usage` (2) or `unavailable` (3). | `src/shared/errors/expected.error.ts` |
-| `attempt(action, message)` | An external failure as `unavailable`. Only `core` and `data`. | `src/shared/errors/expected.error.ts` |
+| `isRecord`, `isText`, `isOneOf` | Type guards for an object, a text with a character that is not a space, and a closed list. | `src/shared/values/checks.guard.ts` |
+| `findByName`, `requireByName` | The item with a `name`; `require…` raises an expected error with the kind and the name. | `src/shared/values/checks.guard.ts` |
+| `requireText`, `parseInteger` | Checked text or integer, or an expected error with the field. | `src/shared/values/text.parse.ts`, `src/shared/values/numbers.parse.ts` |
+| `formatDate`, `formatTime`, `formatDateTime` | Local date, time of day and both, for logs and people. | `src/shared/values/dates.format.ts` |
+| `ExpectedError(kind, message)` | `rule` (exit 1), `usage` (2) or `unavailable` (3). | `src/shared/expected.error.ts` |
+| `attempt(action, message)` | An external failure as `unavailable`. Only `core` and `data`. | `src/shared/expected.error.ts` |
 | `readSetting({ name, fallback, parse })` | The parsed value of the first source, or its fallback. | `src/shared/settings/read.setting.ts` |
 | `CommandRegistration`, `CommandResult` | A command and its options as data; its result as data and a view or a text. | `src/shared/output/command.type.ts` |
 | `View` (`list`, `record`), `formatView` | A typed table or facts, and their aligned text. | `src/shared/output/view.type.ts`, `src/shared/output/view.format.ts` |

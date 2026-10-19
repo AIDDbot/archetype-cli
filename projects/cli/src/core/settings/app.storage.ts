@@ -1,8 +1,8 @@
-import { isRecord } from "#shared/checks.guard.ts";
-import { attempt } from "#shared/errors/expected.error.ts";
-import type { TextFiles } from "#shared/files.type.ts";
+import { isRecord } from "#shared/values/checks.guard.ts";
+import { attempt } from "#shared/expected.error.ts";
+import type { TextFiles } from "#shared/settings/files.type.ts";
 import type { ConfigurationStorage } from "#shared/settings/configuration.type.ts";
-import { textFiles } from "./files.adapter.ts";
+import { textFiles } from "#core/files.adapter.ts";
 
 export function createConfigurationStorage(files: TextFiles = textFiles): ConfigurationStorage {
   return {

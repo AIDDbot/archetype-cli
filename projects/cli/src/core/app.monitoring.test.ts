@@ -1,8 +1,8 @@
 import { expect, test, vi } from "vite-plus/test";
 import { createLogger, formatLog, type LogOutput } from "./app.logger.ts";
 import { runApplication } from "./app.lifecycle.ts";
-import { ExpectedError } from "#shared/errors/expected.error.ts";
-import type { Logger } from "#shared/output/logger.type.ts";
+import { ExpectedError } from "#shared/expected.error.ts";
+import type { Logger } from "#shared/logging/logger.type.ts";
 function fakeLogger() {
   return { log: vi.fn<Logger["log"]>(), stop: vi.fn<Logger["stop"]>(async () => {}) };
 }

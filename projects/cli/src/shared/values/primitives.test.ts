@@ -3,7 +3,7 @@ import { isRecord, isText, isOneOf, findByName, requireByName } from "./checks.g
 import { requireText } from "./text.parse.ts";
 import { parseInteger } from "./numbers.parse.ts";
 import { formatDate, formatTime, formatDateTime } from "./dates.format.ts";
-import { ExpectedError, attempt } from "./errors/expected.error.ts";
+import { ExpectedError, attempt } from "#shared/expected.error.ts";
 test("checks records, text and closed values", () => {
   expect(isRecord({})).toBe(true);
   for (const value of [null, [], "text", 1]) expect(isRecord(value)).toBe(false);

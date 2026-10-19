@@ -1,12 +1,12 @@
 import { expect, test } from "vite-plus/test";
 import { cp, readFile, writeFile } from "node:fs/promises";
-import { join, resolve } from "node:path";
+import { join } from "node:path";
 import { createCliSetup } from "#shared/projects/setup.ts";
 import { runJson } from "#shared/projects/json.ts";
 import { cliDirectory } from "#shared/projects/settings.ts";
+import { identity } from "#shared/projects/identity.ts";
 import { technologies } from "#shared/test-data/technologies.ts";
 
-const identity = JSON.parse(await readFile(resolve(cliDirectory, "../../package.json"), "utf8"));
 const isAuthorName = typeof identity.author === "string";
 const author = isAuthorName ? identity.author : identity.author.name;
 const projects = [

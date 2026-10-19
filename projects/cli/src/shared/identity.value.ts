@@ -1,4 +1,4 @@
-import { isRecord, isText } from "./checks.guard.ts";
+import { isRecord, isText } from "#shared/values/checks.guard.ts";
 export interface PackageIdentity {
   name: string;
   displayName?: string;

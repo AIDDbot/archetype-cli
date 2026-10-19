@@ -1,5 +1,5 @@
 import { appendFile, mkdir, readFile, writeFile } from "node:fs/promises";
-import type { TextFiles } from "#shared/files.type.ts";
+import type { TextFiles } from "#shared/settings/files.type.ts";
 
 export const textFiles: TextFiles = {
   read: (path) => readFile(path, "utf8"),
