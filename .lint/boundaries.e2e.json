@@ -17,6 +17,14 @@
         ]
       }
     ],
+    "eslint/no-restricted-properties": [
+      "error",
+      {
+        "object": "process",
+        "property": "platform",
+        "message": "No branch for a platform: stop a started project with tree-kill, which stops the whole tree on each platform."
+      }
+    ],
     "vitest/no-restricted-vi-methods": [
       "error",
       {
