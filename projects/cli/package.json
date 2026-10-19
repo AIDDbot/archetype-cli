@@ -1,7 +1,7 @@
 {
   "name": "cli",
   "displayName": "Archetype CLI",
-  "version": "0.4.13",
+  "version": "0.4.14",
   "private": true,
   "description": "A local command-line application and its acceptance suite",
   "homepage": "https://aiddbot.com",
