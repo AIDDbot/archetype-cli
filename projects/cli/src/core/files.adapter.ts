@@ -1,4 +1,4 @@
-import { existsSync, readFileSync } from "node:fs";
+import { readFileSync } from "node:fs";
 import { appendFile, mkdir, readFile, writeFile } from "node:fs/promises";
 import type { TextFiles } from "#shared/files.type.ts";
 
@@ -9,7 +9,6 @@ export const textFiles: TextFiles = {
 
 export const logFiles = { mkdir, appendFile };
 
-export const packageFiles = {
-  exists: existsSync,
-  read: (path: string) => readFileSync(path, "utf8"),
-};
+/** The root package.json of the system: projects/{project}/src/core/ is four folders below it. */
+export const readSystemPackage = (): unknown =>
+  JSON.parse(readFileSync(new URL("../../../../package.json", import.meta.url), "utf8"));

@@ -8,9 +8,10 @@ import { runApplication } from "./core/app.lifecycle.ts";
 import { applicationHelp, commandHelp, settingOptions, shellOptions } from "./core/app.help.ts";
 import { ExpectedError } from "./shared/errors/expected.error.ts";
 import type { Logger } from "./shared/output/logger.type.ts";
-import { loadIdentity } from "./core/app.identity.ts";
+import { readSystemPackage } from "./core/files.adapter.ts";
+import { parseIdentity } from "./shared/identity.value.ts";
 import { renderOutput } from "./core/app.output.ts";
-const identity = loadIdentity(fileURLToPath(new URL(".", import.meta.url)));
+const identity = parseIdentity(readSystemPackage());
 const commands = features.map((register) => register({ identity }));
 const options = settingOptions(definitions);
 function parse(args: string[]) {

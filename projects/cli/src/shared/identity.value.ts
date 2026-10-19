@@ -6,7 +6,6 @@ export interface PackageIdentity {
   author?: string | { name: string; url?: string };
   homepage: string;
   version: string;
-  workspaces?: string[];
 }
 
 export function isPackageIdentity(value: unknown): value is PackageIdentity {
@@ -23,6 +22,11 @@ function authorName(author: PackageIdentity["author"]): string {
 }
 
 export type Identity = ReturnType<typeof createIdentity>;
+
+export function parseIdentity(metadata: unknown): Identity {
+  if (!isPackageIdentity(metadata)) throw new Error("Invalid identity in the root package.json");
+  return createIdentity(metadata);
+}
 
 export function createIdentity(metadata: PackageIdentity) {
   const hasAuthor = metadata.author !== undefined;

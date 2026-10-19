@@ -1,7 +1,7 @@
 import { spawn } from "node:child_process";
 import { cp, mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
-import { join, resolve } from "node:path";
+import { join } from "node:path";
 import { cliDirectory, cliStart } from "./settings.ts";
 const isWindows = process.platform === "win32";
 export async function createCli() {
@@ -36,9 +36,9 @@ interface Invocation {
 }
 /** A copy of the cli and the root identity, for a test that runs on the defaults. */
 async function copyProject(directory: string) {
-  const project = join(directory, "cli");
+  const project = join(directory, "projects", "cli");
   await cp(cliDirectory, project, { recursive: true });
-  await cp(resolve(cliDirectory, "../../package.json"), join(directory, "package.json"));
+  await cp(join(cliDirectory, "..", "..", "package.json"), join(directory, "package.json"));
   return { project, logs: null, start: `node "${join(project, "src/app.main.ts")}"` };
 }
 function environmentOf(options: Invocation) {
