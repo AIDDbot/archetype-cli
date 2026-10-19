@@ -21,14 +21,20 @@ function authorName(author: PackageIdentity["author"]): string {
   return isName ? author : author.name;
 }
 
-export type Identity = ReturnType<typeof createIdentity>;
+export interface Identity {
+  name: string;
+  description: string;
+  author: string;
+  website: string;
+  version: string;
+}
 
 export function parseIdentity(metadata: unknown): Identity {
   if (!isPackageIdentity(metadata)) throw new Error("Invalid identity in the root package.json");
   return createIdentity(metadata);
 }
 
-export function createIdentity(metadata: PackageIdentity) {
+export function createIdentity(metadata: PackageIdentity): Identity {
   const hasAuthor = metadata.author !== undefined;
   return {
     name: metadata.displayName ?? metadata.name,

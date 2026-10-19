@@ -1,6 +1,6 @@
 {
   "$schema": "../node_modules/oxlint/configuration_schema.json",
-  "jsPlugins": ["./conditions.mjs"],
+  "jsPlugins": ["./conditions.mjs", "./types.mjs"],
   "categories": {
     "correctness": "off"
   },
@@ -42,9 +42,28 @@
       {
         "maxOperators": 1
       }
-    ]
+    ],
+    "types/named": "error",
+    "typescript/explicit-module-boundary-types": "error"
   },
   "overrides": [
+    {
+      "files": ["**/*.tsx"],
+      "rules": {
+        "typescript/explicit-module-boundary-types": "off"
+      }
+    },
+    {
+      "files": ["**/src/core/**/*.adapter.ts"],
+      "rules": {
+        "eslint/complexity": [
+          "error",
+          {
+            "max": 1
+          }
+        ]
+      }
+    },
     {
       "files": ["**/src/core/**/*.middleware.ts"],
       "rules": {

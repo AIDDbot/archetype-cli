@@ -8,11 +8,21 @@ export interface LogOutput {
   appendFile(path: string, data: string): Promise<void>;
   error(message: string): void;
 }
-export function formatLog(input: { date: Date; level: LogLevel; message: string }) {
+export interface LogEntry {
+  date: Date;
+  level: LogLevel;
+  message: string;
+}
+export function formatLog(input: LogEntry): string {
   return `${formatTime(input.date)} cli ${input.level.toUpperCase()} ${input.message.replace(/\r\n|\r|\n/g, " | ")}`;
 }
+export interface LoggerOptions {
+  directory?: string | undefined;
+  level: string;
+  quietConsole?: boolean;
+}
 export function createLogger(
-  options: { directory?: string | undefined; level: string; quietConsole?: boolean },
+  options: LoggerOptions,
   output: LogOutput = { ...logFiles, error: console.error },
 ): Logger {
   let queue = Promise.resolve();

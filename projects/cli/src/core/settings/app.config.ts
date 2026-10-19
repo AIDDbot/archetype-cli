@@ -4,11 +4,9 @@ import type { ConfigurationStorage } from "#shared/settings/configuration.type.t
 import { requireByName } from "#shared/values/checks.guard.ts";
 import type { SettingSources } from "./app.settings.ts";
 import type { Settings } from "#shared/settings/settings.type.ts";
+type SettingsInput = { sources: SettingSources; directory: string };
 export async function createSettings(
-  input: {
-    sources: SettingSources;
-    directory: string;
-  },
+  input: SettingsInput,
   storage: ConfigurationStorage = createConfigurationStorage(),
 ): Promise<Settings> {
   const { sources, directory } = input;

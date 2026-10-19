@@ -14,9 +14,10 @@ export function findByName<T extends { name: string }>(
 ): T | undefined {
   return items.find((item) => item.name === name);
 }
+type NameRequest = { name: string; kind: string };
 export function requireByName<T extends { name: string }>(
   items: readonly T[],
-  request: { name: string; kind: string },
+  request: NameRequest,
 ): T {
   const item = findByName(items, request.name);
   if (!item) throw new ExpectedError("usage", request.kind + " not found: " + request.name);

@@ -1,6 +1,6 @@
 {
   "$schema": "../node_modules/oxlint/configuration_schema.json",
-  "jsPlugins": ["./conditions.mjs"],
+  "jsPlugins": ["./conditions.mjs", "./types.mjs"],
   "categories": {
     "correctness": "off"
   },
@@ -42,6 +42,8 @@
       {
         "maxOperators": 1
       }
-    ]
+    ],
+    "types/named": "error",
+    "typescript/explicit-module-boundary-types": "error"
   }
 }

@@ -1,6 +1,11 @@
 import type { Identity } from "#shared/identity.value.ts";
 import type { CommandRegistration, CommandOption } from "#shared/output/command.type.ts";
 import type { SettingDefinition } from "#shared/settings/settings.type.ts";
+/** A help result: the data for `--json` and the text for a human. */
+export interface HelpResult {
+  data: object;
+  text: string;
+}
 export const shellOptions: readonly CommandOption[] = [
   { name: "help", summary: "Show help" },
   { name: "json", summary: "Write one JSON object" },
@@ -14,7 +19,10 @@ export function settingOptions(definitions: readonly SettingDefinition[]): Comma
     default: fallback,
   }));
 }
-export function applicationHelp(commands: readonly CommandRegistration[], identity: Identity) {
+export function applicationHelp(
+  commands: readonly CommandRegistration[],
+  identity: Identity,
+): HelpResult {
   const data = {
     name: identity.name,
     commands: commands.map(({ name, summary, usage }) => ({ name, summary, usage })),
@@ -30,7 +38,10 @@ function describeOption(option: CommandOption) {
   return `--${option.name}${placeholder}  ${option.summary}${fallback}`;
 }
 
-export function commandHelp(command: CommandRegistration, options: readonly CommandOption[]) {
+export function commandHelp(
+  command: CommandRegistration,
+  options: readonly CommandOption[],
+): HelpResult {
   const allOptions = [...shellOptions, ...options, ...command.options];
   const operations = command.operations.map((item) => `${item.name}  ${item.summary}`);
   const descriptions = allOptions.map(describeOption);

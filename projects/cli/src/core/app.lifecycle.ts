@@ -10,7 +10,7 @@ const exitCodes = { rule: 1, usage: 2, unavailable: 3 } as const;
 export async function runApplication(
   action: () => Promise<string | undefined>,
   invocation: Invocation,
-) {
+): Promise<number> {
   const started = performance.now();
   let code = 0;
   try {

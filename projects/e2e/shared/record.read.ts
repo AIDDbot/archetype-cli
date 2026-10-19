@@ -1,4 +1,9 @@
-export function readRecord(text: string) {
+export interface RecordLine {
+  label: string | undefined;
+  value: string | undefined;
+  column: number;
+}
+export function readRecord(text: string): RecordLine[] {
   return text
     .trimEnd()
     .split(/\r?\n/)

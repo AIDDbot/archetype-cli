@@ -1,6 +1,5 @@
-import type { Identity } from "#shared/identity.value.ts";
 import { ExpectedError } from "#shared/expected.error.ts";
-import type { CommandRegistration } from "#shared/output/command.type.ts";
+import type { CommandRegistration, FeatureContext } from "#shared/output/command.type.ts";
 
 const technologies = [
   "TypeScript 7",
@@ -15,7 +14,7 @@ const projects = [
   { name: "e2e", type: "e2e", technologies },
 ] as const;
 
-export function registerAbout({ identity }: { identity: Identity }): CommandRegistration {
+export function registerAbout({ identity }: FeatureContext): CommandRegistration {
   return {
     name: "about",
     summary: "Show application identity and technology",

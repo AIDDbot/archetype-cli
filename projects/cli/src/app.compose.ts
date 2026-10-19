@@ -1,6 +1,6 @@
 import { fileURLToPath } from "node:url";
 import { features } from "./features/features.manifest.ts";
-import { parseShellArguments } from "#core/settings/app.arguments.ts";
+import { parseShellArguments, type ParsedArguments } from "#core/settings/app.arguments.ts";
 import { createSettings } from "#core/settings/app.config.ts";
 import { definitions, selectLogging, type LoggingSettings } from "#core/settings/app.settings.ts";
 import { createLogger } from "#core/app.logger.ts";
@@ -8,13 +8,14 @@ import { runApplication } from "#core/app.lifecycle.ts";
 import { applicationHelp, commandHelp, settingOptions, shellOptions } from "#core/app.help.ts";
 import { ExpectedError } from "#shared/expected.error.ts";
 import type { Logger } from "#shared/logging/logger.type.ts";
+import type { CommandResult } from "#shared/output/command.type.ts";
 import metadata from "#package" with { type: "json" };
 import { parseIdentity } from "#shared/identity.value.ts";
 import { renderOutput } from "#core/app.output.ts";
 const identity = parseIdentity(metadata);
 const commands = features.map((register) => register({ identity }));
 const options = settingOptions(definitions);
-function parse(args: string[]) {
+function parse(args: string[]): ParsedArguments {
   return parseShellArguments(args, {
     definitions,
     options: [...shellOptions, ...commands.flatMap((command) => command.options)],
@@ -27,9 +28,9 @@ function findCommand(requested: string) {
   return command;
 }
 async function run(
-  parsed: ReturnType<typeof parse>,
+  parsed: ParsedArguments,
   configure: (logging: LoggingSettings) => void,
-) {
+): Promise<CommandResult> {
   const [name, target] = parsed.command;
   const isHelp = name === "help";
   const hasExtraHelpArguments = isHelp && parsed.command.length > 2;
@@ -47,7 +48,7 @@ async function run(
   configure({ directory: settings.get("LOG_DIR"), level: settings.get("LOG_LEVEL") });
   return command.run(parsed.command.slice(1), settings);
 }
-export async function startApp() {
+export async function startApp(): Promise<number> {
   const args = process.argv.slice(2);
   const directory = fileURLToPath(new URL("../", import.meta.url));
   const isJson = args.includes("--json");
@@ -61,7 +62,7 @@ export async function startApp() {
   const configure = (logging: LoggingSettings) => {
     logger = create(logging);
   };
-  let parsed: ReturnType<typeof parse> | undefined;
+  let parsed: ParsedArguments | undefined;
   const action = async () => {
     parsed = parse(args);
     const wantsVersion = parsed.options.version === true;
@@ -76,10 +77,12 @@ export async function startApp() {
     error: (message) => report(message, { isJson, parsed, args }),
   });
 }
-function report(
-  message: string,
-  context: { isJson: boolean; parsed: ReturnType<typeof parse> | undefined; args: string[] },
-) {
+interface ReportContext {
+  isJson: boolean;
+  parsed: ParsedArguments | undefined;
+  args: string[];
+}
+function report(message: string, context: ReportContext): void {
   if (context.isJson) {
     console.log(JSON.stringify({ error: message.replace(/^error: /, "") }));
     return;

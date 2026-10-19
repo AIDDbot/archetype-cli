@@ -7,10 +7,16 @@ function optionType(placeholder: string | undefined) {
   return isFlag ? ("boolean" as const) : ("string" as const);
 }
 
-export function parseShellArguments(
-  args: string[],
-  input: { definitions: readonly SettingDefinition[]; options: readonly CommandOption[] },
-) {
+export interface ArgumentsInput {
+  definitions: readonly SettingDefinition[];
+  options: readonly CommandOption[];
+}
+export interface ParsedArguments {
+  values: Record<string, unknown>;
+  command: string[];
+  options: Record<string, unknown>;
+}
+export function parseShellArguments(args: string[], input: ArgumentsInput): ParsedArguments {
   const settings = input.definitions.map(({ option }) => [option, { type: "string" as const }]);
   const declared = input.options.map(({ name, placeholder }) => [
     name,
