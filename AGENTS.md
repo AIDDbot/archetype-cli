@@ -28,7 +28,7 @@ The repository is an AIDDbot system: `.product/PRD.md` lists the shipped foundat
 
 - **Language**: TypeScript 7, on Node.js with no build and no framework. Use erasable syntax.
 - **Dependencies**: the Node.js standard library and Vite+. The list is closed: no other dependency unless a spec names it.
-- **Pre-commit hook**: `vp staged` formats, lints and type-checks the staged files with safe fixes, and runs the unit tests that they affect. `npm run check` does the same for the whole repository, with no fix, and `npm run fix` applies the fixes. Both leave out `.agents/` and `.aiddbot/`: AIDDbot owns them.
+- **Pre-commit hook**: `vp staged` formats, lints and type-checks the staged files with safe fixes, and runs the unit tests that they affect. `npm run check` does the same for the whole repository, with no fix, and `npm run fix` applies the fixes. Both leave out `.agents/` and `.aiddbot/`, which AIDDbot owns, and `.lint/`, a copy of the Blueprint.
 - **Debt checks**: in `.lint/` at the root. The `boundaries.json` and `complexity.json` of each project extend them, and its scripts `layers` and `crap` read them.
 
 ## Blueprint
