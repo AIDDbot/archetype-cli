@@ -35,8 +35,8 @@ export function createLogger(
       const isVisible = level === "warn" || level === "error";
       if (isVisible && !options.quietConsole) output.error(line);
       const { directory } = options;
-      const hasDirectory = directory !== undefined;
-      if (!hasDirectory) return;
+      const isConsoleOnly = directory === undefined;
+      if (isConsoleOnly) return;
       const write = async () => {
         await output.mkdir(directory, { recursive: true });
         await output.appendFile(join(directory, `${formatDate(date)}.log`), `${line}\n`);

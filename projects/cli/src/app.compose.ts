@@ -23,8 +23,8 @@ function parse(args: string[]): ParsedArguments {
 }
 function findCommand(requested: string) {
   const command = commands.find((item) => item.name === requested);
-  const isKnown = command !== undefined;
-  if (!isKnown) throw new ExpectedError("usage", `Unknown command: ${requested}`);
+  const isUnknown = command === undefined;
+  if (isUnknown) throw new ExpectedError("usage", `Unknown command: ${requested}`);
   return command;
 }
 async function run(
@@ -36,8 +36,8 @@ async function run(
   const hasExtraHelpArguments = isHelp && parsed.command.length > 2;
   if (hasExtraHelpArguments) throw new ExpectedError("usage", "Use help [command]");
   const requested = isHelp ? target : name;
-  const hasRequest = requested !== undefined;
-  if (!hasRequest) return applicationHelp(commands, identity);
+  const isApplicationHelp = requested === undefined;
+  if (isApplicationHelp) return applicationHelp(commands, identity);
   const command = findCommand(requested);
   const wantsHelp = isHelp || parsed.options.help === true;
   if (wantsHelp) return commandHelp(command, options);

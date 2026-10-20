@@ -10,8 +10,8 @@ export function createConfigService(settings: Settings): ConfigService {
       const isAll = name === undefined;
       if (isAll) return { settings: settings.list() };
       const setting = settings.list().find((item) => item.name === name);
-      const isKnown = setting !== undefined;
-      if (!isKnown) throw new ExpectedError("usage", `Unknown setting: ${name}`);
+      const isUnknown = setting === undefined;
+      if (isUnknown) throw new ExpectedError("usage", `Unknown setting: ${name}`);
       return setting;
     },
     set: (name, value) => settings.set(name, value),

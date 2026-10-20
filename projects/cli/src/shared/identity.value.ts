@@ -15,8 +15,8 @@ export function isPackageIdentity(value: unknown): value is PackageIdentity {
 }
 
 function authorName(author: PackageIdentity["author"]): string {
-  const hasAuthor = author !== undefined;
-  if (!hasAuthor) return "AIDDbot";
+  const isAnonymous = author === undefined;
+  if (isAnonymous) return "AIDDbot";
   const isName = typeof author === "string";
   return isName ? author : author.name;
 }

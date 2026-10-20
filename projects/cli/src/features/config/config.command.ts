@@ -18,16 +18,18 @@ export function registerConfig(): CommandRegistration {
       if (isGet) {
         const data = service.get(name);
         const isList = "settings" in data;
-        if (!isList) return { data, text: data.value };
-        return {
-          data,
-          view: {
-            kind: "list",
-            records: "settings",
-            columns: ["Setting", "Value", "Source"],
-            rows: data.settings.map((setting) => [setting.name, setting.value, setting.source]),
-          },
-        };
+        if (isList) {
+          return {
+            data,
+            view: {
+              kind: "list",
+              records: "settings",
+              columns: ["Setting", "Value", "Source"],
+              rows: data.settings.map((setting) => [setting.name, setting.value, setting.source]),
+            },
+          };
+        }
+        return { data, text: data.value };
       }
       const isSet = operation === "set" && args.length === 3;
       const hasValue = name !== undefined && value !== undefined;
