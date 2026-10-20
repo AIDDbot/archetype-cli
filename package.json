@@ -21,6 +21,8 @@
   "scripts": {
     "prepare": "vp config",
     "test": "vp run -r test",
+    "check": "vp check && vp test run",
+    "fix": "vp check --fix",
     "upgrade": "npx npm-check-updates@latest -u && npm install"
   },
   "devDependencies": {

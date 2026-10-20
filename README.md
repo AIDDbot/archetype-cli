@@ -37,7 +37,7 @@ npm ci
 npm test
 ```
 
-`npm test` at the root runs the unit tests of `cli` and the full acceptance suite of `e2e`. In each project: `npm test`, `npm run layers` (import boundaries) and `npm run crap` (complexity and coverage). Run a command with `npm start -- about` in `projects/cli/`.
+`npm test` at the root runs the unit tests of `cli` and the full acceptance suite of `e2e`. `npm run check` formats, lints and type-checks the whole repository and runs every unit test, with no fix; `npm run fix` applies the safe fixes. In each project: `npm test`, `npm run layers` (import boundaries) and `npm run crap` (complexity and coverage). Run a command with `npm start -- about` in `projects/cli/`.
 
 ## Contribute
 
