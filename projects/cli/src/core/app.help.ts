@@ -1,4 +1,4 @@
-import type { Identity } from "#shared/identity.value.ts";
+import type { Identity } from "#shared/identity.type.ts";
 import type { CommandRegistration, CommandOption } from "#shared/output/command.type.ts";
 import type { SettingDefinition } from "#shared/settings/settings.type.ts";
 /** A help result: the data for `--json` and the text for a human. */
@@ -24,10 +24,10 @@ export function applicationHelp(
   identity: Identity,
 ): HelpResult {
   const data = {
-    name: identity.name,
+    name: identity.displayName,
     commands: commands.map(({ name, summary, usage }) => ({ name, summary, usage })),
   };
-  const text = `${identity.name}\n${identity.description}\nUsage: ${identity.name} <command> [options]\n${data.commands.map((item) => `${item.name}  ${item.summary}`).join("\n")}\nhelp  Show help`;
+  const text = `${identity.displayName}\n${identity.description}\nUsage: ${identity.displayName} <command> [options]\n${data.commands.map((item) => `${item.name}  ${item.summary}`).join("\n")}\nhelp  Show help`;
   return { data, text };
 }
 function describeOption(option: CommandOption) {

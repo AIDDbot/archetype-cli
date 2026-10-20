@@ -24,7 +24,7 @@ The system has no user accounts.
 ## Technical decisions
 
 - TypeScript on Node.js, with the Vite+ stack of the AIDDbot Blueprint.
-- Identity in the root `package.json`: `displayName` "Archetype CLI", `description` "A local command-line application and its acceptance suite", `author` "Alberto Basalo" with `url` "https://x.com/albertobasalo", `homepage` "https://aiddbot.com", `license` "MIT".
+- Identity in the `package.json` of `cli`: `displayName` "Archetype CLI", `description` "A local command-line application and its acceptance suite", `author` "Alberto Basalo" with `url` "https://x.com/albertobasalo".
 - License: MIT, with the copyright of Alberto Basalo, in `LICENSE` at the root.
 - Basic authentication: no, the system has no users.
 

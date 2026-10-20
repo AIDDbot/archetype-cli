@@ -4,7 +4,6 @@
   "version": "0.4.16",
   "private": true,
   "description": "A local command-line application and its acceptance suite",
-  "homepage": "https://aiddbot.com",
   "license": "MIT",
   "author": {
     "name": "Alberto Basalo",

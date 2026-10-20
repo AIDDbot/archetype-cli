@@ -1,6 +1,6 @@
 import type { Settings } from "#shared/settings/settings.type.ts";
 import type { View } from "./view.type.ts";
-import type { Identity } from "#shared/identity.value.ts";
+import type { Identity } from "#shared/identity.type.ts";
 export interface CommandOption {
   name: string;
   placeholder?: string;

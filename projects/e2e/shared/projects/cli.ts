@@ -53,11 +53,10 @@ function orDefault<T>(value: T | undefined, fallback: T): T {
   const isMissing = value === undefined;
   return isMissing ? fallback : value;
 }
-/** A copy of the cli and the root identity, for a test that runs on the defaults. */
+/** A copy of the cli, with its own `package.json`, for a test that runs on the defaults. */
 async function copyProject(directory: string) {
   const project = join(directory, "projects", "cli");
   await cp(cliDirectory, project, { recursive: true });
-  await cp(join(cliDirectory, "..", "..", "package.json"), join(directory, "package.json"));
   return { project, logs: null, start: `node "${join(project, "src/app.main.ts")}"` };
 }
 function environmentOf(options: Invocation) {

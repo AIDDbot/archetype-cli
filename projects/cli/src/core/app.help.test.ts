@@ -3,10 +3,9 @@ import { applicationHelp, commandHelp, settingOptions, shellOptions } from "./ap
 import type { CommandRegistration } from "#shared/output/command.type.ts";
 
 const identity = {
-  name: "System",
+  displayName: "System",
   description: "A system",
-  author: "Author",
-  website: "https://example.com",
+  author: { name: "Author", url: "https://example.com" },
   version: "1.0.0",
 };
 
@@ -22,11 +21,11 @@ const command: CommandRegistration = {
 test("application help lists registered commands and shell usage", () => {
   const help = applicationHelp([command], identity);
   expect(help.data).toEqual({
-    name: identity.name,
+    name: identity.displayName,
     commands: [{ name: "sample", summary: "Sample command", usage: "sample list" }],
   });
   expect(help.text).toBe(
-    `${identity.name}\n${identity.description}\nUsage: ${identity.name} <command> [options]\nsample  Sample command\nhelp  Show help`,
+    `${identity.displayName}\n${identity.description}\nUsage: ${identity.displayName} <command> [options]\nsample  Sample command\nhelp  Show help`,
   );
 });
 

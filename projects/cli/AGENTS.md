@@ -39,7 +39,7 @@ The Common stack of the root `AGENTS.md`. Node.js runs `src/app.main.ts` with no
 | Container | Is | Never |
 | --- | --- | --- |
 | `core` | The platform that the framework or the entry calls one time at startup: server or shell, router, connections, error handler, global styles. Files at the root, other elements in folders by technical concern (`logging`, `database`) when the folder is full. | Business rules. Imports of a feature. Folders `utils`, `helpers`, `common`, `misc`. |
-| `shared` | Generic elements with no domain, and the contracts of the services that features need (such as the logger, the HTTP client or the error type). At the root, only the expected error and the identity function; each other file in the folder of its concern, from the closed list of `shared` folders of the Blueprint (`values`, `settings`, `logging`, `output`). | Domain words. Imports of `core` or of a feature. Folders `utils`, `helpers`, `common`, `misc`. |
+| `shared` | Generic elements with no domain, and the contracts of the services that features need (such as the logger, the HTTP client or the error type). At the root, only the expected error and the identity type; each other file in the folder of its concern, from the closed list of `shared` folders of the Blueprint (`values`, `settings`, `logging`, `output`). | Domain words. Imports of `core` or of a feature. Folders `utils`, `helpers`, `common`, `misc`. |
 | feature | One flat folder for one unit of business value. The role in each file name tells its layer. | Subfolders. Imports of `core`. Imports of a different feature, except its facade. |
 | composition | The entry. It starts `core`, registers each feature by name in one explicit list (the manifest), and gives the features the services of `core` through the contracts of `shared`. The only part that knows `core` and the features. | Automatic discovery: folder scans, global decorators, file-based routers. |
 
@@ -77,7 +77,7 @@ Imports out of a folder: `#shared/{path}.ts`, `#core/{path}.ts` (only `core` and
 | `CommandRegistration`, `CommandResult` | A command and its options as data; its result as data and a view or a text. | `src/shared/output/command.type.ts` |
 | `View` (`list`, `record`), `formatView` | A typed table or facts, and their aligned text. | `src/shared/output/view.type.ts`, `src/shared/output/view.format.ts` |
 | `formatValue`, `machineValue`, `emptyMessage` | A value for a person or for `--json`, and the text of an empty list. | `src/shared/output/values.format.ts`, `src/shared/output/states.format.ts` |
-| `parseIdentity` | The name, description, author, website and version of the `package.json` of the project, which the composition imports as `#package` and passes. | `src/shared/identity.value.ts` |
+| `Identity` | The type of the identity fields of the `package.json` of the project, which the composition imports as `#package` and passes. A type only, with no function and no fallback. | `src/shared/identity.type.ts` |
 
 ## 6 · Coding rules
 

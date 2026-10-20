@@ -32,7 +32,7 @@ Results use standard output. Errors and console records at `WARN` or `ERROR` use
 
 ## Shell
 
-The application reads its name, description, author, website, and version from its own `package.json`, a copy of the identity of the root `package.json`.
+The application reads its name (`displayName`), description, author with website (`author.name`, `author.url`), and version from its own `package.json`. Each field is required, with no fallback.
 
 Each feature registers its command name, summary, usage, operations, and options. Help lists the registrations in manifest order. The shell parses options once. It accepts help, JSON, version, and setting options before the command.
 
@@ -50,11 +50,11 @@ Human values use local dates and readable duration units. Machine values use ISO
 
 ## About
 
-`--version` writes only the root identity version and one line break. It uses text even with `--json`.
+`--version` writes only the identity version and one line break. It uses text even with `--json`.
 
-`about` shows the application name, description, version, author, website, and the technology of each project. It reads the shared identity. When the author is absent, it uses `AIDDbot` and `https://aiddbot.com`.
+`about` shows the application name, description, version, author, website, and the technology of each project. It reads the identity of `shell`.
 
-`about --json` returns `name`, `description`, `version`, `author`, `homepage`, and a `projects` array. Each project has `name`, `type`, and `technologies`. The feature holds the technology list as a constant. Both projects use TypeScript 7, Node.js, Node.js standard library, framework-free, Vite+, and Vitest.
+`about --json` returns `name`, `description`, `version`, `author` (`name`, `url`), and a `projects` array. Each project has `name`, `type`, and `technologies`. The feature holds the technology list as a constant. Both projects use TypeScript 7, Node.js, Node.js standard library, framework-free, Vite+, and Vitest.
 
 ---
 

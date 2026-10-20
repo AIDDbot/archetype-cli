@@ -24,14 +24,14 @@ export function registerAbout({ identity }: FeatureContext): CommandRegistration
     async run(args) {
       const hasArguments = args.length > 0;
       if (hasArguments) throw new ExpectedError("usage", "Use about [options]");
-      const { name, description, version, author, website: homepage } = identity;
-      const data = { name, description, version, author, homepage, projects };
+      const { displayName: name, description, version, author } = identity;
+      const data = { name, description, version, author, projects };
       const facts = [
         { label: "Name", value: name },
         { label: "Description", value: description },
         { label: "Version", value: version },
-        { label: "Author", value: author },
-        { label: "Homepage", value: homepage },
+        { label: "Author", value: author.name },
+        { label: "Website", value: author.url },
         ...projects.map((project) => ({
           label: `${project.name} (${project.type})`,
           value: { items: project.technologies },

@@ -54,7 +54,7 @@ Imports out of a folder: `#shared/{path}.ts`, from the `imports` of `package.jso
 | `createCliSetup()` | A function that gives each test its own `cli`: a temporary configuration file and log folder, deleted after the test. `cli.run(args, options)` returns the exit code, `stdout` and `stderr`; `cli.copy()` gives a copy of the project for a test of the defaults. | `shared/projects/setup.ts`, `shared/projects/cli.ts` |
 | `expectFailure(result, code)` | The exit code and one `error:` line on standard error. | `shared/projects/failure.ts` |
 | `runJson(cli, args)` | One invocation with `--json`, and its parsed data. | `shared/projects/json.ts` |
-| `identity` | The identity of the system, from the root `package.json`, read once. Tests compare with it, never with fixed text. | `shared/projects/identity.ts` |
+| `expectIdentity`, `expectApplicationName` | Check that the identity that the cli shows is there (text that is not empty, a semantic version, an author with a URL), never its values: the owner changes them. No test reads a `package.json`. | `shared/projects/identity.ts` |
 | `readTable(text)`, `readRecord(text)` | The rows of a text table by column name, and the facts of a record. | `shared/table.read.ts`, `shared/record.read.ts` |
 
 ## 6 · Coding rules

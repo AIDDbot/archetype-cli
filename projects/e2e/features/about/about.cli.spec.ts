@@ -1,22 +1,19 @@
 import { expect, test } from "vite-plus/test";
-import { cp, readFile, writeFile } from "node:fs/promises";
-import { join } from "node:path";
 import { createCliSetup } from "#shared/projects/setup.ts";
 import { runJson } from "#shared/projects/json.ts";
-import { cliDirectory } from "#shared/projects/settings.ts";
-import { identity } from "#shared/projects/identity.ts";
+import { expectIdentity } from "#shared/projects/identity.ts";
 import { technologies } from "#shared/test-data/technologies.ts";
 
-const isAuthorName = typeof identity.author === "string";
-const author = isAuthorName ? identity.author : identity.author.name;
 const projects = [
   { name: "cli", type: "cli", technologies },
   { name: "e2e", type: "e2e", technologies },
 ];
 const setup = createCliSetup();
 
-test("@S0005-R01 version writes only the root identity version", async () => {
+test("@S0005-R01 version writes only the identity version", async () => {
   const cli = await setup();
+  const about = await runJson(cli, ["about"]);
+  const identity = expectIdentity(about.data);
   const result = await cli.run(["--version"]);
   expect(result.code).toBe(0);
   expect(result.stdout).toBe(`${identity.version}\n`);
@@ -25,16 +22,13 @@ test("@S0005-R01 version writes only the root identity version", async () => {
 
 test("@S0005-R02 about shows identity and each project", async () => {
   const cli = await setup();
+  const about = await runJson(cli, ["about"]);
+  const identity = expectIdentity(about.data);
   const result = await cli.run(["about"]);
   expect(result.code).toBe(0);
   expect(result.stderr).toBe("");
-  for (const value of [
-    identity.displayName ?? identity.name,
-    identity.description,
-    identity.version,
-    author,
-    identity.homepage,
-  ])
+  const { name, description, version, author } = identity;
+  for (const value of [name, description, version, author.name, author.url])
     expect(result.stdout).toContain(value);
   for (const project of projects) {
     expect(result.stdout).toContain(`${project.name} (${project.type})`);
@@ -56,18 +50,14 @@ test("@S0005-R03 about JSON contains identity and each project", async () => {
   const cli = await setup();
   const result = await runJson(cli, ["about"]);
   expect(result.code).toBe(0);
-  expect(result.data).toMatchObject({
-    name: identity.displayName ?? identity.name,
-    description: identity.description,
-    version: identity.version,
-    author,
-    homepage: identity.homepage,
-    projects: expect.arrayContaining(projects),
-  });
+  expectIdentity(result.data);
+  expect(result.data).toMatchObject({ projects: expect.arrayContaining(projects) });
 });
 
 test("@S0005-R04 version stays text with either JSON option order", async () => {
   const cli = await setup();
+  const about = await runJson(cli, ["about"]);
+  const identity = expectIdentity(about.data);
   for (const args of [
     ["--version", "--json"],
     ["--json", "--version"],
@@ -77,25 +67,4 @@ test("@S0005-R04 version stays text with either JSON option order", async () => 
     expect(result.stdout).toBe(`${identity.version}\n`);
     expect(result.stderr).toBe("");
   }
-});
-
-test("@S0005-R05 absent author uses the default author and website", async () => {
-  const cli = await setup();
-  const project = join(cli.directory, "projects", "cli");
-  await cp(join(cliDirectory, "src"), join(project, "src"), { recursive: true });
-  const metadata = JSON.parse(await readFile(join(cliDirectory, "package.json"), "utf8"));
-  delete metadata.author;
-  metadata.homepage = "https://example.invalid";
-  await writeFile(join(project, "package.json"), JSON.stringify(metadata));
-  const text = await cli.run(["about"], { project });
-  expect(text.code).toBe(0);
-  expect(text.stdout).toContain("AIDDbot");
-  expect(text.stdout).toContain("https://aiddbot.com");
-  const json = await cli.run(["about", "--json"], { project });
-  expect(json.code).toBe(0);
-  expect(json.stderr).toBe("");
-  expect(JSON.parse(json.stdout)).toMatchObject({
-    author: "AIDDbot",
-    homepage: "https://aiddbot.com",
-  });
 });

@@ -63,7 +63,7 @@ A record is one thing that the application shows, such as the application itself
 
 ### Requirements
 
-- **R01**: WHEN the `cli` shows one record (`about`), it SHALL write one line for each fact, as `{label}: {value}`, with each value in the same column. Test: read the identity from the root `package.json`; read each fact with the record reader and check its label, value and value column. Keep the project technology facts that `S0005-R02` names. Tag: `@S0006-R01`.
+- **R01**: WHEN the `cli` shows one record (`about`), it SHALL write one line for each fact, as `{label}: {value}`, with each value in the same column. Test: read the identity from `about --json`; read each fact with the record reader and check its label, value and value column. Keep the project technology facts that `S0005-R02` names. Tag: `@S0006-R01`.
 - **R02**: WHEN the `cli` runs `config get`, it SHALL show the settings as a table with the columns `Setting`, `Value` and `Source`. Replaces: `S0002-R03`. Test: use the table reader to check each existing setting, its selected value and its source; cover the defaults and the argument, environment and file sources. Never assert the whole list or its order. Also invoke `config get` with an extra argument and an unknown option; check the error, command usage and exit code 2 under `S0004-R07`. Tag: `@S0006-R02`.
 
 ### Expected URLs and APIs

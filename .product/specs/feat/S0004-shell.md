@@ -20,7 +20,7 @@ The CLI must have one frame that each feature uses. Users need one way to find t
 
 ### Business rules
 
-- The identity of the application (name, description, author, website and version) must come from the root `package.json`. Each project must keep its copy in one location only: its own `package.json`.
+- The identity of the application (name, description, author with website, and version) must come from the `package.json` of the project that shows it, and from no other location. Each field is required, with no fallback.
 - The shell must know no feature. Each feature must add its own commands through its registration.
 
 ### Out of context
@@ -33,7 +33,7 @@ The CLI must have one frame that each feature uses. Users need one way to find t
 
 ### All projects
 
-- One identity file in `shared` reads `displayName` (or `name`), `description`, `author`, `homepage` and `version` from the `package.json` of the project, which the composition imports as `#package`. Nothing copies them by hand: the scaffold writes the copy, and `aidd release` writes each version.
+- The `Identity` type at the root of `shared` names `displayName`, `description`, `author` (`name`, `url`) and `version`. It is a type only, with no function. Only the composition imports the `package.json` of the project (`#package`), and gives it to `core` and to the features as an `Identity`.
 
 ### cli
 
@@ -45,7 +45,7 @@ The CLI must have one frame that each feature uses. Users need one way to find t
 ### e2e
 
 - A helper in `shared` runs one `cli` invocation with `--json` and returns the parsed object and the exit code.
-- The tests read the expected identity from the root `package.json`, never from fixed text.
+- The tests check that the identity is there, never its values: the owner changes them. The application name is text that is not empty, from `help --json`. No test reads a `package.json`.
 - A test checks what its spec adds and the order that it needs, never that nothing else exists: later specs add settings, migrations and commands.
 
 ## Verification

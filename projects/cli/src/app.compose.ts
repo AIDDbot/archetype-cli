@@ -9,10 +9,8 @@ import { applicationHelp, commandHelp, settingOptions, shellOptions } from "#cor
 import { ExpectedError } from "#shared/expected.error.ts";
 import type { Logger } from "#shared/logging/logger.type.ts";
 import type { CommandResult } from "#shared/output/command.type.ts";
-import metadata from "#package" with { type: "json" };
-import { parseIdentity } from "#shared/identity.value.ts";
+import identity from "#package" with { type: "json" };
 import { renderOutput } from "#core/app.output.ts";
-const identity = parseIdentity(metadata);
 const commands = features.map((register) => register({ identity }));
 const options = settingOptions(definitions);
 function parse(args: string[]): ParsedArguments {

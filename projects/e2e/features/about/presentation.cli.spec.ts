@@ -1,28 +1,26 @@
 import { expect, test } from "vite-plus/test";
 import { createCliSetup } from "#shared/projects/setup.ts";
-import { identity } from "#shared/projects/identity.ts";
+import { runJson } from "#shared/projects/json.ts";
+import { expectIdentity } from "#shared/projects/identity.ts";
 import { readRecord } from "#shared/record.read.ts";
 import { technologies } from "#shared/test-data/technologies.ts";
 
 const setup = createCliSetup();
 
-function readAuthorName(author: string | { name: string }): string {
-  const isName = typeof author === "string";
-  return isName ? author : author.name;
-}
-
 test("@S0006-R01 about labels and aligns identity and project facts", async () => {
   const cli = await setup();
+  const about = await runJson(cli, ["about"]);
+  const identity = expectIdentity(about.data);
   const result = await cli.run(["about"]);
   expect(result.code).toBe(0);
   expect(result.stderr).toBe("");
   const facts = readRecord(result.stdout);
   const values = {
-    Name: identity.displayName ?? identity.name,
+    Name: identity.name,
     Description: identity.description,
     Version: identity.version,
-    Author: readAuthorName(identity.author),
-    Homepage: identity.homepage,
+    Author: identity.author.name,
+    Website: identity.author.url,
   };
   const column = facts.find(({ label }) => label === "Name")?.column;
   expect(column).toBeTypeOf("number");
