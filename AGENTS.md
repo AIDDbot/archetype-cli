@@ -49,7 +49,7 @@ All projects obey these principles. Each project `AGENTS.md` gives its architect
 
 ## Archetype gate
 
-Changes pass the archetype gate of [the Builder](https://github.com/AIDDbot/archetype-builder/blob/main/seed.md).
+Changes pass the archetype gate of [the Builder](https://github.com/AIDDbot/archetype-builder/blob/main/handover.md).
 
 ## Versions
 
