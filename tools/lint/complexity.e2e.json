@@ -1,0 +1,55 @@
+{
+  "$schema": "../../node_modules/oxlint/configuration_schema.json",
+  "jsPlugins": ["./conditions.mjs", "./types.mjs"],
+  "categories": {
+    "correctness": "off"
+  },
+  "rules": {
+    "eslint/no-param-reassign": [
+      "error",
+      {
+        "props": true
+      }
+    ],
+    "eslint/complexity": [
+      "error",
+      {
+        "max": 8
+      }
+    ],
+    "eslint/max-statements": [
+      "error",
+      {
+        "max": 64
+      }
+    ],
+    "eslint/max-depth": [
+      "error",
+      {
+        "max": 4
+      }
+    ],
+    "eslint/max-params": [
+      "error",
+      {
+        "max": 4
+      }
+    ],
+    "eslint/max-lines": [
+      "error",
+      {
+        "max": 256,
+        "skipBlankLines": true,
+        "skipComments": true
+      }
+    ],
+    "conditions/named": [
+      "error",
+      {
+        "maxOperators": 1
+      }
+    ],
+    "types/named": "error",
+    "typescript/explicit-module-boundary-types": "error"
+  }
+}

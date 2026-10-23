@@ -1,0 +1,27 @@
+{
+  "name": "archetype-cli",
+  "version": "0.4.17",
+  "codename": "Daylight",
+  "private": true,
+  "license": "MIT",
+  "workspaces": [
+    "projects/*"
+  ],
+  "type": "module",
+  "scripts": {
+    "prepare": "vp config",
+    "test": "node tools/scripts/test.mjs",
+    "test:e2e": "vp run --filter e2e test",
+    "upgrade": "node tools/scripts/upgrade.mjs",
+    "check": "node tools/scripts/check.mjs",
+    "fix": "vp check --fix"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.5",
+    "@vitest/coverage-v8": "^5.0.5",
+    "vite-plus": "^1.4.0"
+  },
+  "overrides": {
+    "vite": "npm:@voidzero-dev/vite-plus-core@latest"
+  }
+}
