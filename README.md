@@ -43,6 +43,17 @@ npm test
 
 Read [`AGENTS.md`](./AGENTS.md). It holds the Blueprint and the gate that each archetype change must pass: green checks, a clean working tree after the full run, tags that match `.product/specs/`, and no open technical debt.
 
+## About
+
+- **Author**: [Alberto Basalo](https://albertobasalo.dev)
+- **Socials**:
+  - [X](https://x.com/albertobasalo)
+  - [LinkedIn](https://www.linkedin.com/in/albertobasalo/)
+  - [GitHub](https://github.com/albertobasalo)
+- **Cursos en Español**: [AI code Academy](https://aicode.academy)
+- **AIDDbot.com**: [AIDDbot.com](https://aiddbot.com)
+- **The main Repository for AIDDBot**: [AIDDbot](https://github.com/AIDDbot/AIDDbot)
+
 ## License
 
 [MIT](./LICENSE)
