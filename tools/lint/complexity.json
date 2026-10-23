@@ -50,7 +50,20 @@
       }
     ],
     "types/named": "error",
-    "typescript/explicit-module-boundary-types": "error"
+    "typescript/explicit-module-boundary-types": "error",
+    "eslint/no-magic-numbers": [
+      "error",
+      {
+        "ignore": [-1, 0, 1, 2],
+        "ignoreArrayIndexes": true,
+        "ignoreDefaultValues": true,
+        "ignoreClassFieldInitialValues": true,
+        "ignoreEnums": true,
+        "ignoreNumericLiteralTypes": true,
+        "ignoreReadonlyClassProperties": true,
+        "ignoreTypeIndexes": true
+      }
+    ]
   },
   "overrides": [
     {
@@ -84,6 +97,7 @@
     {
       "files": ["**/*.test.ts", "**/*.spec.ts"],
       "rules": {
+        "eslint/no-magic-numbers": "off",
         "eslint/max-statements": [
           "error",
           {

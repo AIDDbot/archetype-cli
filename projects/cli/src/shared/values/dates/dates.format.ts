@@ -1,18 +1,23 @@
-function pad(value: number, width: number): string {
-  return String(value).padStart(width, "0");
+const WIDTH = { year: 4, field: 2, milliseconds: 3 } as const;
+
+function pad(value: number, digits: number): string {
+  return String(value).padStart(digits, "0");
 }
 
 function formatClock(date: Date): string {
-  return `${pad(date.getHours(), 2)}:${pad(date.getMinutes(), 2)}:${pad(date.getSeconds(), 2)}`;
+  const hours = pad(date.getHours(), WIDTH.field);
+  const minutes = pad(date.getMinutes(), WIDTH.field);
+  return `${hours}:${minutes}:${pad(date.getSeconds(), WIDTH.field)}`;
 }
 
 export function formatDate(date: Date): string {
   const month = date.getMonth() + 1;
-  return `${pad(date.getFullYear(), 4)}-${pad(month, 2)}-${pad(date.getDate(), 2)}`;
+  const year = pad(date.getFullYear(), WIDTH.year);
+  return `${year}-${pad(month, WIDTH.field)}-${pad(date.getDate(), WIDTH.field)}`;
 }
 
 export function formatTime(date: Date): string {
-  return `${formatClock(date)}.${pad(date.getMilliseconds(), 3)}`;
+  return `${formatClock(date)}.${pad(date.getMilliseconds(), WIDTH.milliseconds)}`;
 }
 
 export function formatDateTime(date: Date): string {
