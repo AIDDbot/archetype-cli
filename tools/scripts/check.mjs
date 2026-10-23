@@ -1,11 +1,11 @@
-// The whole repository, with no fix: each step runs, also after a red one, so that no check hides another.
+// The whole repository, with no fix: each step runs, also after a red one, so that no check hides another. `layers` and `crap` are cached: a run with no change replays the last result.
 import { run } from "./shell.mjs";
 
 const steps = [
   ["format", "vp fmt --check"],
   ["lint and types", "vp check --no-fmt"],
-  ["layers", 'vp run --filter "./projects/*" layers'],
-  ["crap", 'vp run --filter "./projects/*" crap'],
+  ["layers", 'vp run --cache --filter "./projects/*" layers'],
+  ["crap", 'vp run --cache --filter "./projects/*" crap'],
 ];
 
 const red = [];

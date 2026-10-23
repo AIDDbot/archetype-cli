@@ -13,7 +13,6 @@ Requirements: Node.js 26 or later, and Git.
 
 ```sh
 npm install                   # also installs the pre-commit hook
-cd projects/cli
 npm start -- --help           # each command with its summary
 npm start -- about --json     # one command, with JSON output
 ```

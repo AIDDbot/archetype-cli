@@ -23,7 +23,7 @@
 
 ## Commands
 
-- `npm test` runs the unit tests, and `npm run test:e2e` runs the acceptance suite. `npm run check` checks format, lint, types, `layers` and `crap` with no fix, and `npm run fix` applies the safe fixes. `npm start -- <command>` in `projects/cli/` runs one command.
+- `npm test` runs the unit tests, and `npm run test:e2e` runs the acceptance suite. `npm run check` checks format, lint, types, `layers` and `crap` with no fix, and `npm run fix` applies the safe fixes. `npm start -- <command>` runs one command of the `cli`.
 - **Pre-commit hook**: `vp staged --relative` formats, lints and type-checks the staged files with safe fixes, and runs the unit tests that they affect. A failure stops the commit.
 
 ## Git

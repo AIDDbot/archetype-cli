@@ -9,6 +9,7 @@
   "type": "module",
   "scripts": {
     "prepare": "vp config",
+    "start": "node tools/scripts/start.mjs",
     "test": "node tools/scripts/test.mjs",
     "test:e2e": "vp run --filter e2e test",
     "upgrade": "node tools/scripts/upgrade.mjs",
