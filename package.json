@@ -1,7 +1,6 @@
 {
   "name": "archetype-cli",
   "version": "0.4.17",
-  "codename": "Daylight",
   "private": true,
   "license": "MIT",
   "workspaces": [
@@ -23,5 +22,6 @@
   },
   "overrides": {
     "vite": "npm:@voidzero-dev/vite-plus-core@latest"
-  }
+  },
+  "codename": "Daylight"
 }
