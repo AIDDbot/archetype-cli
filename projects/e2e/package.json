@@ -1,0 +1,17 @@
+{
+  "name": "e2e",
+  "version": "0.0.0",
+  "private": true,
+  "license": "MIT",
+  "type": "module",
+  "imports": {
+    "#shared/*": "./shared/*"
+  },
+  "scripts": {
+    "start": "vp test --passWithNoTests",
+    "test": "vp test run --passWithNoTests",
+    "test:spec": "vp test run --passWithNoTests -t",
+    "layers": "vp lint -c boundaries.json",
+    "crap": "vp lint -c complexity.json"
+  }
+}
