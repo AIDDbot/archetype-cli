@@ -10,7 +10,7 @@ import {
 import { test } from "#shared/projects/cli.fixture.ts";
 import { invokeJson } from "#shared/projects/cli.json.ts";
 
-test("@S0008-R01 writes a valid setting for the next invocation", async ({ cli }) => {
+test("@S0006-R01 writes a valid setting for the next invocation", async ({ cli }) => {
   const set = await cli.run({ arguments: ["config", "set", "LOG_LEVEL", "warn"] });
   expectExit(set, 0);
   const get = await invokeJson({
@@ -24,7 +24,7 @@ for (const [name, value, code] of [
   ["NO_SUCH_SETTING", "x", 2],
   ["LOG_LEVEL", "loud", 1],
 ] as const) {
-  test(`@S0008-R01 rejects ${name}=${value} without changing settings`, async ({ cli }) => {
+  test(`@S0006-R01 rejects ${name}=${value} without changing settings`, async ({ cli }) => {
     await cli.run({ arguments: ["config", "set", "LOG_LEVEL", "warn"] });
     const before = await cli.run({ arguments: ["--json", "config", "get"] });
     const invalid = await cli.run({ arguments: ["config", "set", name, value] });
@@ -34,7 +34,7 @@ for (const [name, value, code] of [
   });
 }
 
-test("@S0008-R02 lists each foundation setting with its value and source", async ({ cli }) => {
+test("@S0006-R02 lists each foundation setting with its value and source", async ({ cli }) => {
   const environment = { LOG_LEVEL: undefined };
   const result = await cli.run({ arguments: ["config", "get"], environment });
   expectSettingsTable(result, cli.directory);
@@ -44,7 +44,7 @@ test("@S0008-R02 lists each foundation setting with its value and source", async
   expectSettingText(single, "info");
 });
 
-test("@S0008-R03 resolves argument, environment, file and default in order", async ({ cli }) => {
+test("@S0006-R03 resolves argument, environment, file and default in order", async ({ cli }) => {
   const base = ["config", "get", "LOG_LEVEL"];
   const fresh = await invokeJson({
     cli,
