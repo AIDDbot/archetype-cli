@@ -1,0 +1,28 @@
+{
+  "name": "cli",
+  "displayName": "Archetype CLI",
+  "version": "0.3.1",
+  "private": true,
+  "description": "A local command-line application and its acceptance suite",
+  "license": "MIT",
+  "author": {
+    "name": "Alberto Basalo",
+    "url": "https://x.com/albertobasalo"
+  },
+  "bin": {
+    "archetype-cli": "./src/app.main.ts"
+  },
+  "type": "module",
+  "imports": {
+    "#shared/*": "./src/shared/*",
+    "#core/*": "./src/core/*",
+    "#api/*": "./src/features/*/*.api.ts",
+    "#package": "./package.json"
+  },
+  "scripts": {
+    "test": "vp test run --passWithNoTests",
+    "layers": "vp lint -c boundaries.json",
+    "crap": "vp lint -c complexity.json && vp test run --coverage --passWithNoTests",
+    "start": "node src/app.main.ts"
+  }
+}
