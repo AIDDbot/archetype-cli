@@ -1,8 +1,8 @@
 # Archetype CLI
 
-Welcome. This is a local command-line application that is ready on its first day: the help of each command, JSON output for scripts, settings in a file, daily logs, an about command, and an acceptance suite that proves each of them. It has no business feature yet. That part is yours.
+Welcome. This is a local command-line application that is ready on its first day. Out of the box, you get the help of each command, JSON output for scripts, settings in a file, daily logs, an about command, and an acceptance suite that proves each of them. It has no business feature yet. That part is yours.
 
-[AIDDbot](https://github.com/AIDDbot/AIDDbot) copies this workspace into each new local command-line system. You can also use it on your own.
+It comes from [AIDDbot](https://github.com/AIDDbot/AIDDbot), a set of agent skills that copies this workspace into each new local command-line system. But you can also use it on your own.
 
 - [What it does](./.product/PRD.md): the features, each one with its spec.
 - [How it is made](./.product/system.md): the projects, the technology and the technical decisions.
@@ -10,6 +10,9 @@ Welcome. This is a local command-line application that is ready on its first day
 ## Start
 
 Requirements: Node.js 26 or later, and Git.
+
+> [!NOTE]
+> This workspace is built on the [Vite+](https://viteplus.dev/) toolchain.
 
 ```sh
 npm install                   # also installs the pre-commit hook
@@ -36,14 +39,16 @@ npm run upgrade    # each dependency to its latest version
 
 Then run `npm run check` and `npm run test:e2e` again.
 
-## Your system
+## Make it yours
+
+> [!TIP]
+> Give the app its name, and sign it as yours.
 
 - Put your identity in `projects/cli/package.json`: `displayName`, `description`, `author` and `version`.
-- `.product/` has the foundation specs (`S0001` to `S0006`) and the schema documents. Your first business spec is `S0007`.
+- The [`.product/`](./.product/) folder has the foundation specs and the schema documents.
+- With [AIDDbot](https://github.com/AIDDbot/AIDDbot), your first business spec is `S0007`.
 
-## Changes
-
-Changes pass the archetype gate of the [Archetype Builder](https://github.com/AIDDbot/archetype-builder) (`handover.md`).
+---
 
 ## About
 
